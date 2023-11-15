@@ -44,7 +44,6 @@ pyOpenSSL
 pyparsing 
 PySocks 
 python-dateutil
-python-magic-bin==0.4.14
 pytz 
 PyYAML
 requests 
