@@ -5,65 +5,65 @@ blurhash==1.1.4
 boost==0.1
 brotlipy==0.7.0
 certifi==2023.7.22
-cffi @ file:///C:/b/abs_49n3v2hyhr/croot/cffi_1670423218144/work
-charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
-click @ file:///D:/bld/click_1620867791035/work
+cffi 
+charset-normalizer
+click 
 cmake==3.27.7
-colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1666700638685/work
-cryptography @ file:///C:/b/abs_8ecplyc3n2/croot/cryptography_1677533105000/work
+colorama 
+cryptography 
 cv==1.0.0
 cvzone==1.5.6
-cycler @ file:///tmp/build/80754af9/cycler_1637851556182/work
+cycler 
 decorator==5.1.1
-dlib @ file:///D:/bld/dlib_1652035402968/work
-face-recognition @ file:///home/conda/feedstock_root/build_artifacts/face_recognition_1619808233029/work
-face-recognition-models @ file:///home/conda/feedstock_root/build_artifacts/face_recognition_models_1595707436534/work
+dlib 
+face-recognition 
+face-recognition-models 
 Flask==2.2.5
 flatbuffers==23.5.26
 greenlet==3.0.1
-idna @ file:///C:/b/abs_bdhbebrioa/croot/idna_1666125572046/work
+idna 
 importlib-metadata==6.7.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
-kiwisolver @ file:///C:/b/abs_88mdhvtahm/croot/kiwisolver_1672387921783/work
+kiwisolver 
 MarkupSafe==2.1.3
 Mastodon.py==1.8.1
-matplotlib @ file:///D:/bld/matplotlib-suite_1636786732647/work
+matplotlib 
 mediapipe==0.9.0.1
 mkl-fft==1.3.1
-mkl-random @ file:///C:/ci/mkl_random_1626186163140/work
+mkl-random 
 mkl-service==2.4.0
 mysql-connector-python==8.0.33
-numpy @ file:///C:/ci/numpy_and_numpy_base_1653574840943/work
+numpy 
 omegaconf==2.3.0
 opencv-contrib-python==4.8.1.78
 opencv-python==4.8.1.78
-pandas @ file:///D:/bld/pandas_1614698123791/work
+pandas
 Pillow==9.2.0
 protobuf==3.20.3
-psutil @ file:///C:/Windows/Temp/abs_b2c2fd7f-9fd5-4756-95ea-8aed74d0039flsd9qufz/croots/recipe/psutil_1656431277748/work
-pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
-pyOpenSSL @ file:///C:/b/abs_552w85x1jz/croot/pyopenssl_1677607703691/work
-pyparsing @ file:///home/conda/feedstock_root/build_artifacts/pyparsing_1690737849915/work
-PySocks @ file:///C:/ci/pysocks_1594394709107/work
-python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1626286286081/work
+psutil 
+pycparser 
+pyOpenSSL 
+pyparsing 
+PySocks 
+python-dateutil
 python-magic-bin==0.4.14
-pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1693930252784/work
-PyYAML @ file:///D:/bld/pyyaml_1648757357341/work
-requests @ file:///C:/ci/requests_1657735288441/work
-scipy @ file:///C:/ci/scipy_1641555141383/work
-seaborn @ file:///C:/b/abs_68ltdkoyoo/croot/seaborn_1673479199997/work
-sentry-sdk @ file:///home/conda/feedstock_root/build_artifacts/sentry-sdk_1697025927139/work
-six @ file:///tmp/build/80754af9/six_1644875935023/work
+pytz 
+PyYAML
+requests 
+scipy 
+seaborn
+sentry-sdk 
+six 
 SQLAlchemy==2.0.22
 torch==1.13.1
 torchvision==0.14.1
-tornado @ file:///D:/bld/tornado_1656937938087/work
-tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1691671248568/work
-typing_extensions @ file:///C:/Windows/TEMP/abs_dd2d0moa85/croots/recipe/typing_extensions_1659638831135/work
-ultralytics @ file:///home/conda/feedstock_root/build_artifacts/ultralytics_1687694838298/work
-urllib3 @ file:///C:/b/abs_9bcwxczrvm/croot/urllib3_1673575521331/work
+tornado 
+tqdm
+typing_extensions
+ultralytics 
+urllib3 
 Werkzeug==2.2.3
-win-inet-pton @ file:///C:/ci/win_inet_pton_1605306165655/work
+win-inet-pton
 wincertstore==0.2
 zipp==3.15.0
