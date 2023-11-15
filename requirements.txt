@@ -44,6 +44,8 @@ pyOpenSSL
 pyparsing 
 PySocks 
 python-dateutil
+python-magic==0.4.27
+python-magic-bin==0.4.14
 pytz 
 PyYAML
 requests 
@@ -53,7 +55,7 @@ sentry-sdk
 six 
 SQLAlchemy==2.0.22
 torch==1.13.1
-torchvision==0.14.1
+torchvision
 tornado 
 tqdm
 typing_extensions
