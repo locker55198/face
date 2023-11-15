@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Face Votering System</title>
+    </head>
+
+    <body>
+        <h1 style="text-align: center; color: aliceblue;">Face Votering System</h1>
+        <hr>
+        <h2 style="text-align: center; font-size: 40px;">Login</h2>
+        <div>
+            <form action="#">
+                <button onclick="LoginImage()" style="background-color: green; color:aliceblue; font-size: 20px; padding: 10px; position: absolute; padding: 10px; top: 700px; left: 800px;">Login</button><br><br>
+            </form>
+            <button onclick="window.location.href='index.html'" style="font-size: 20px; position: absolute; padding: 10px; top: 700px; left: 1000px;">Back</button>
+        </div>
+        
+        <div style="position: absolute; top: 180px; left: 650px; background-color: #666;">
+            <video id="video" width="600" height="500"></video>
+        </div>
+
+        <script>
+            var video = document.getElementById('video');
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+
+            if (navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        video.srcObject = stream;
+                    })
+                    .catch(function(error) {
+                        console.log('No Cam：', error);
+                    });
+            }
+
+            function LoginImage() {
+                // 捕獲圖像
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                var image = canvas.toDataURL('image/jpeg');
+
+                // 將圖像發送到後端處理，這裡使用了XMLHttpRequest
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'save_image.php', true);
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var response = xhr.responseText;
+                        if (response === "Login successful") {
+                            // 登錄成功的處理邏輯
+                            console.log('Login successful');
+                            window.location.href = 'vote.html';
+                        } else if (response === "Login failed") {
+                            // 登錄失敗的處理邏輯
+                            console.log('Login failed');
+                        }
+                    }
+                };
+                xhr.send('image=' + encodeURIComponent(image));
+            }
+        </script>
+
+        <style>
+            body {
+                background-image: url("vote.jpg");
+                background-size: cover;
+                background-repeat: no-repeat;
+            }
+        </style>
+    </body>
+</html>
