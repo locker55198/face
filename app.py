@@ -32,7 +32,7 @@ def register():
             error_message = 'Name already exists. Please choose a different name.'
             cursor.close()
             conn.close()
-            return redirect(url_for('index', message=error_message))
+            return redirect(url_for('register', message=error_message))
         else:
             sql = "INSERT INTO facevote (name) VALUES (%s)"
             cursor.execute(sql, (name,))
