@@ -7,6 +7,14 @@
 <body>
     <h1 style="text-align: center; color: aliceblue;">Face Votering System</h1>
     <hr>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    {% if error_message %}
+        <p>{{ error_message }}</p>
+    {% endif %}
+
     <h2 style="text-align: center; font-size: 40px;">Register</h2>
     <div style="text-align: center;">
         <form id="registerForm" action="/register" method="POST">
