@@ -26,6 +26,12 @@ def register():
         sql_check = "SELECT * FROM facevote WHERE name = %s"
         cursor.execute(sql_check, (name,))
         result = cursor.fetchone()
+
+         if result:
+            error_message = 'Name already exists. Please choose a different name.'
+            cursor.close()
+            conn.close()
+            return redirect(url_for('index', message=error_message))
        
         sql = "INSERT INTO facevote (name) VALUES (%s)"
         cursor.execute(sql, (name,))
