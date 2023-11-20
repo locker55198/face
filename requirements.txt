@@ -2,13 +2,5 @@ Flask
 gunicorn
 mysql-connector-python
 cvzone
-onnxruntime
-waitress
-pillow
-numpy
 opencv-python
-ultralytics
-git+https://github.com/ultralytics/ultralytics.git
-torch
-torchvision
-mediapipe
+
