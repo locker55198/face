@@ -44,8 +44,26 @@ def register():
     conn.close()
     return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        name = request.form['name']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        sql_check = "SELECT * FROM facevote WHERE name = %s"
+        cursor.execute(sql_check, (name,))
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        if result:
+            return redirect('/vote')
+        else:
+            return render_template('login.html', error='Invalid login')
+
     return render_template('login.html')
 
 @app.route('/vote')
