@@ -32,7 +32,7 @@ def register():
             cursor.close()
             conn.close()
             return redirect(url_for('index', message=error_message))
-       
+    else:
         sql = "INSERT INTO facevote (name) VALUES (%s)"
         cursor.execute(sql, (name,))
         conn.commit()
@@ -40,7 +40,6 @@ def register():
         conn.close()
         return redirect(url_for('index', message='Registration successful'))
        
-
     return render_template('register.html')
     
 
