@@ -66,8 +66,17 @@ def login():
 
     return render_template('login.html')
 
-@app.route('/vote')
+@app.route('/vote', methods=['GET', 'POST'])
 def vote():
+    if request.method == 'POST':
+        candidate = request.form.get('candidate')
+        if candidate:
+            vote = Vote(candidate=candidate)
+            db.session.add(vote)
+            db.session.commit()
+            return "Vote submitted successfully."
+        else:
+            return "Invalid vote."
     return render_template('vote.html')
 
 if __name__ == '__main__':
