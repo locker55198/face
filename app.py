@@ -1,8 +1,7 @@
 import os
 
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, response
-import cv2
-import cvzone
+
 
 app = Flask(__name__)
 
