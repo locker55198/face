@@ -75,6 +75,7 @@ def vote():
             db.session.add(vote)
             db.session.commit()
             return "Vote submitted successfully."
+            return redirect('/')
         else:
             return "Invalid vote."
     return render_template('vote.html')
