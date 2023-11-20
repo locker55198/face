@@ -18,29 +18,33 @@ def favicon():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
     if request.method == 'POST':
         name = request.form['name']
-        conn = get_db_connection()
-        cursor = conn.cursor()
 
         sql_check = "SELECT * FROM facevote WHERE name = %s"
         cursor.execute(sql_check, (name,))
         result = cursor.fetchone()
 
-         if result:
+        if result:
             error_message = 'Name already exists. Please choose a different name.'
             cursor.close()
             conn.close()
             return redirect(url_for('index', message=error_message))
-    else:
-        sql = "INSERT INTO facevote (name) VALUES (%s)"
-        cursor.execute(sql, (name,))
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return redirect(url_for('index', message='Registration successful'))
-       
+        else:
+            sql = "INSERT INTO facevote (name) VALUES (%s)"
+            cursor.execute(sql, (name,))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return redirect(url_for('index', message='Registration successful'))
+
+    cursor.close()
+    conn.close()
     return render_template('register.html')
+在修正後的程式碼中，將 conn.cursor() 的
     
 
 @app.route('/login')
