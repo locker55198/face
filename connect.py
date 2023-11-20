@@ -4,7 +4,7 @@ def get_db_connection():
     conn = mysql.connector.connect(
         host='fyp.mysql.database.azure.com',
         user='ming',
-        password='P@ss0wrd',
+        password='P@ssw0rd',
         database='fyp'
     )
     return conn
