@@ -18,13 +18,15 @@
 
     <script>
     function showAlert() {
-    var success = {{ success|default(False) }};
-    if (success) {
-        alert('Registration successful');
-    } else {
-        alert('Name already exists. Please choose a different name');
+    var successMessage = "{{ success_message }}";
+    var errorMessage = "{{ error_message }}";
+
+        if (successMessage) {
+            alert(successMessage);
+        } else if (errorMessage) {
+            alert(errorMessage);
+        }
     }
-}
     </script>
 
     <style>
