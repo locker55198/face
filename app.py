@@ -26,10 +26,10 @@ def register():
         conn.commit()
         cursor.close()
         conn.close()
-        return redirect(url_for('index'))
+        return redirect(url_for('index', message='Registration successful'))
        
-        message = 'Registration successful'
-    return render_template('register.html', message=message)
+
+    return render_template('register.html')
     
 
 @app.route('/login')
