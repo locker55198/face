@@ -1,7 +1,7 @@
 import os
 
-from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for
-
+from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash
+from connect import get_db_connection
 
 app = Flask(__name__)
 
@@ -19,6 +19,13 @@ def favicon():
 def register():
     if request.method == 'POST':
         name = request.form['name']
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        sql = "INSERT INTO facevote (name) VALUES (%s)"
+        cursor.execute(sql, (name,))
+        conn.commit()
+        cursor.close()
+        conn.close()
         flash('Registration successful', 'success') 
         return redirect(url_for('index'))
 
