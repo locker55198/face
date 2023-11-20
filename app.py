@@ -26,7 +26,6 @@ def register():
         conn.commit()
         cursor.close()
         conn.close()
-        flash('Registration successful', 'success') 
         return redirect(url_for('index'))
 
     return render_template('register.html')
