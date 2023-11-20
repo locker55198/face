@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Face Votering System</title>
+    </head>
+
+    <body>
+        <h1 style="text-align: center; color: aliceblue;">Face Votering System</h1>
+        <hr>
+        <h2 style="text-align: center; font-size: 40px; color: yellow;">Please Select One Candidate</h2>
+        <div>
+            <form action="#">
+                <table style="width:100%">
+                    <tr>
+                      <th style="color: white; font-size: 50px;">Biden</th>
+                      <th style="color: white; font-size: 50px;">Obama</th>
+                    </tr>
+                    <tr style="height:300px">
+                      <td style="text-align: center;">
+                        <img src="{{ url_for('static', filename='images/biden.jpg') }}" alt="Image" width="500" height="400">
+                      </td>
+                      <td style="text-align: center;">
+                        <img src="{{ url_for('static', filename='images/obama.jpg') }}" alt="Image" width="400" height="400">
+                      </td>
+                    </tr>
+                    <tr style="height:70px">
+                        <td style="text-align: center;">
+                            <input type="radio" id="biden" name="candidate" value="1">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="radio" id="obama" name="candidate" value="2">
+                        </td>
+                    </tr>
+                  </table>
+            </form>
+            <br>
+            <button onclick="vote()" style="font-size: 20px; style="font-size: 20px; position: absolute; padding: 10px; top: 800px; left: 1000px;"">Submit</button>
+        </div>
+        
+       
+        
+
+        <script>
+            function vote() {
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                var image = canvas.toDataURL('image/jpeg');
+
+                // 將圖像發送到後端處理，這裡使用了XMLHttpRequest
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'save_image.php', true);
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log('圖像已保存到數據庫');
+                    }
+                };
+                xhr.send('image=' + encodeURIComponent(image));
+            }
+        </script>
+
+        <style>
+            body {
+            background-image: url('{{ url_for('static', filename='images/vote.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            }
+        </style>
+    </body>
+</html>

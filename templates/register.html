@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Face Votering System</title>
+</head>
+
+<body>
+    <h1 style="text-align: center; color: aliceblue;">Face Votering System</h1>
+    <hr>
+    <h2 style="text-align: center; font-size: 40px;">Register</h2>
+    <div style="text-align: center;">
+        <form id="registerForm" action="/register" method="POST">
+            <input type="text" id="name" name="name" placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
+            <button type="submit" style="background-color: green; color: aliceblue; font-size: 20px; padding: 10px; position: relative; z-index: 1;">Register</button><br><br>
+        </form>
+        <button type="button" onclick="location.href='/'" style="font-size: 20px; position: relative; z-index: 1;">Back</button>
+    </div>
+
+    <div style="position: relative; margin-top: -200px; margin-left: 60px;">
+        <video id="video" width="600" height="500" autoplay></video>
+        <img id="capturedImage" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;">
+    </div>
+    <button onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>
+
+    <script>
+        var video = document.getElementById('video');
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    video.srcObject = stream;
+                })
+                .catch(function(error) {
+                    console.log('No Cam:', error);
+                });
+        }
+
+        function captureImage() {
+            var captureWidth = 600; // 調整為所需的寬度
+            var captureHeight = 500; // 調整為所需的高度
+
+            // 設定畫布的寬度和高度
+            canvas.width = captureWidth;
+            canvas.height = captureHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var image = canvas.toDataURL('image/jpeg');
+
+            // 獲取使用者輸入的姓名
+            var name = document.getElementById('name').value;
+
+            // 將圖像顯示在圖像元素中
+            var capturedImage = document.getElementById('capturedImage');
+            capturedImage.src = image;
+            capturedImage.style.display = 'block';
+            capturedImage.style.width = video.offsetWidth + 'px';
+            capturedImage.style.height = video.offsetHeight + 'px';
+
+            將圖像和姓名作為表單數據發送到後端進行處理
+            var form = new FormData(document.getElementById('registerForm'));
+            form.append('image', image);
+            form.append('name', name);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/register', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log('姓名和圖像已發送到後端');
+                }
+            };
+            xhr.send(form);
+        }
+    </script>
+
+    <style>
+        body {
+            background-image: url('{{ url_for('static', filename='images/vote.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+    </style>
+</body>
+</html>
