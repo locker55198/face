@@ -34,29 +34,8 @@
                   </table>
             </form>
             <br>
-            <button onclick="vote()" style="font-size: 20px; style="font-size: 20px; position: absolute; padding: 10px; top: 800px; left: 1000px;"">Submit</button>
+            <button type="submit" style="font-size: 20px; style="font-size: 20px; position: absolute; padding: 10px; top: 800px; left: 1000px;"">Submit</button>
         </div>
-        
-       
-        
-
-        <script>
-            function vote() {
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                var image = canvas.toDataURL('image/jpeg');
-
-                // 將圖像發送到後端處理，這裡使用了XMLHttpRequest
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'save_image.php', true);
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        console.log('圖像已保存到數據庫');
-                    }
-                };
-                xhr.send('image=' + encodeURIComponent(image));
-            }
-        </script>
 
         <style>
             body {
