@@ -11,21 +11,19 @@
     <div style="text-align: center;">
         <form id="registerForm" action="/register" method="POST">
             <input type="text" id="name" name="name" placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
-            <button type="submit" onclick="showAlert()" style="background-color: green; color: aliceblue; font-size: 20px; padding: 10px; position: relative; z-index: 1;">Register</button><br><br>
+            <button type="submit" style="background-color: green; color: aliceblue; font-size: 20px; padding: 10px; position: relative; z-index: 1;">Register</button><br><br>
         </form>
         <button type="button" onclick="location.href='/'" style="font-size: 20px; position: relative; z-index: 1;">Back</button>
     </div>
 
     <script>
-    function showAlert() {
-    var successMessage = "{{ success_message }}";
+     var successMessage = "{{ success_message }}";
     var errorMessage = "{{ error_message }}";
 
-        if (successMessage) {
-            alert(successMessage);
-        } else if (errorMessage) {
-            alert(errorMessage);
-        }
+    if (successMessage) {
+        alert(successMessage);
+    } else if (errorMessage) {
+        alert(errorMessage);
     }
     </script>
 
