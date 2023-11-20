@@ -71,13 +71,19 @@ def vote():
     if request.method == 'POST':
         candidate = request.form.get('candidate')
         if candidate:
-            vote = Vote(candidate=candidate)
-            db.session.add(vote)
-            db.session.commit()
-            return "Vote submitted successfully."
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            sql = "INSERT INTO vote (candidate) VALUES (%s)"
+            cursor.execute(sql, (candidate,))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            flash('Vote submitted successfully.', 'success')
             return redirect('/')
         else:
-            return "Invalid vote."
+            flash('Invalid vote.', 'error')
+            return redirect('/')
+    
     return render_template('vote.html')
 
 if __name__ == '__main__':
