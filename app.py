@@ -43,9 +43,7 @@ def register():
 
     cursor.close()
     conn.close()
-    return render_template('register.html')
-在修正後的程式碼中，將 conn.cursor() 的
-    
+    return render_template('register.html')    
 
 @app.route('/login')
 def login():
