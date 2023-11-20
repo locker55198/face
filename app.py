@@ -19,6 +19,7 @@ def favicon():
 def register():
     if request.method == 'POST':
         name = request.form['name']
+        flash('Registration successful', 'success') 
         return redirect(url_for('index'))
 
     return render_template('register.html')
