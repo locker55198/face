@@ -69,7 +69,7 @@ def login():
 @app.route('/vote', methods=['GET', 'POST'])
 def vote():
     if request.method == 'POST':
-        vote = request.form.get('candidate')
+        vote = request.form.get('vote')
        if vote in ['1', '2']:
             try:
             conn = get_db_connection()
