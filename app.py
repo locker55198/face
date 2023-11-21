@@ -71,7 +71,6 @@ def vote():
     if request.method == 'POST':
         vote = request.form.get('vote')
        if vote in ['1', '2']:
-            try:
             conn = get_db_connection()
             cursor = conn.cursor()
             sql = "INSERT INTO facevote (vote) VALUES (%s)"
@@ -81,9 +80,6 @@ def vote():
             conn.close()
             flash('Vote submitted successfully.', 'success')
             return redirect('/')
-          except Exception as e:
-                flash('Error submitting vote: {}'.format(str(e)), 'error')
-                return redirect('/')
         else:
             flash('Invalid vote.', 'error')
             return redirect('/vote')
