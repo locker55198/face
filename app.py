@@ -52,14 +52,14 @@ def login():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        sql_check = "SELECT * FROM facevote WHERE name = ?"
-        cursor.execute(sql_check, (name,))
+        sql_check = "SELECT * FROM facevote WHERE name = %s AND vote = 0" % (name,)
+        cursor.execute(sql_check)
         result = cursor.fetchone()
 
         cursor.close()
         conn.close()
 
-        if result and result['vote'] == 0:
+        if result:
             return redirect('/vote')
         else:
             return render_template('login.html', error='Invalid login')
@@ -69,21 +69,22 @@ def login():
 @app.route('/vote', methods=['GET', 'POST'])
 def vote():
     if request.method == 'POST':
-        vote_value = request.form.get('vote')
-        if vote_value in ['1', '2']:
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO facevote (vote) VALUES (?)", (vote_value,))
-            conn.commit()
-            cursor.close()
-            conn.close()
-            flash('Vote submitted successfully.', 'success')
-            return redirect('/')
-        else:
-            flash('Invalid vote.', 'error')
-            return redirect('/vote')
+        candidate = request.form['candidate']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        sql_update = "UPDATE facevote SET vote = 1 WHERE name = %s" % (candidate,)
+        cursor.execute(sql_update)
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+        return "Vote submitted successfully."
 
     return render_template('vote.html')
+
 
 if __name__ == '__main__':
     app.debug = True
