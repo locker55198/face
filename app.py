@@ -69,12 +69,13 @@ def login():
 @app.route('/vote', methods=['GET', 'POST'])
 def vote():
     if request.method == 'POST':
-        candidate = request.form.get('candidate')
-        if candidate in ['1', '2']:
+        vote = request.form.get('candidate')
+        if vote in ['1', '2']:
+            try:
             conn = get_db_connection()
             cursor = conn.cursor()
             sql = "INSERT INTO facevote (vote) VALUES (%s)"
-            cursor.execute(sql, (candidate,))
+            cursor.execute(sql, (vote,))
             conn.commit()
             cursor.close()
             conn.close()
