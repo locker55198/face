@@ -73,17 +73,18 @@ def vote():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        sql_update = "UPDATE facevote SET vote = %s"
+        name = request.form['name']
 
-        cursor.execute(sql_update, (candidate,))
+        sql_update = "UPDATE facevote SET vote = %s WHERE name = %s"
+
+        cursor.execute(sql_update, (candidate, name))
 
         conn.commit()
 
         cursor.close()
         conn.close()
 
-        return "Vote submitted successfully."
-        return redirect(url_for('index', success_message='Vote Successful'))
+       return redirect(url_for('index', success_message='Vote successful'))
 
     return render_template('vote.html')
 
