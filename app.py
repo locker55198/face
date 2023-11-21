@@ -73,8 +73,7 @@ def vote():
         if vote_value in ['1', '2']:
             conn = get_db_connection()
             cursor = conn.cursor()
-            sql = "INSERT INTO facevote (vote) VALUES (%s)"
-            cursor.execute(sql, (vote_value,))
+            cursor.execute("INSERT INTO facevote (vote) VALUES (?)", (vote_value,))
             conn.commit()
             cursor.close()
             conn.close()
