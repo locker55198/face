@@ -4,3 +4,7 @@ mysql-connector-python
 cvzone
 opencv-python
 psycopg2
+onnxruntime
+waitress
+pillow
+numpy
