@@ -52,14 +52,14 @@ def login():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        sql_check = "SELECT * FROM facevote WHERE vote = 0"
-        cursor.execute(sql_check, (vote,))
+        sql_check = "SELECT * FROM facevote WHERE name = ? AND vote = 0"
+        cursor.execute(sql_check, (name,))
         result = cursor.fetchone()
 
         if result:
-              cursor.close()
-              conn.close()
-             return redirect(url_for('vote', success_message='Login successful'))
+            cursor.close()
+            conn.close()
+            return redirect(url_for('vote', success_message='Login successful'))
         else:
             return render_template('login.html', error='Invalid login')
 
@@ -73,8 +73,8 @@ def vote():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        sql_update = "UPDATE facevote SET vote = %s WHERE name = %s" % (candidate,)
-        cursor.execute(sql_update)
+        sql_update = "UPDATE facevote SET vote = 1 WHERE name = ?"
+        cursor.execute(sql_update, (candidate,))
         conn.commit()
 
         cursor.close()
