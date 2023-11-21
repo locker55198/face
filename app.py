@@ -73,11 +73,9 @@ def vote():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        name = request.form['name']
+        sql_update = "UPDATE facevote SET vote = %s"
 
-        sql_update = "UPDATE facevote SET vote = %s WHERE name = %s"
-
-        cursor.execute(sql_update, (candidate, name))
+        cursor.execute(sql_update, (candidate,))
 
         conn.commit()
 
