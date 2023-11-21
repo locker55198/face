@@ -57,6 +57,7 @@ def login():
         result = cursor.fetchone()
 
         if result:
+            session['name'] = name
             cursor.close()
             conn.close()
             return redirect(url_for('vote', success_message='Login successful'))
