@@ -52,8 +52,8 @@ def login():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        sql_check = "SELECT * FROM facevote WHERE name = ? AND vote = 0"
-        cursor.execute(sql_check, (name,))
+        sql_check = "SELECT * FROM facevote WHERE vote = 0"
+        cursor.execute(sql_check, (vote,))
         result = cursor.fetchone()
 
         if result:
@@ -73,7 +73,7 @@ def vote():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        sql_update = "UPDATE facevote SET vote = 1 WHERE name = %s" % (candidate,)
+        sql_update = "UPDATE facevote SET vote = %s WHERE name = %s" % (candidate,)
         cursor.execute(sql_update)
         conn.commit()
 
