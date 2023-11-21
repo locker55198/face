@@ -52,8 +52,8 @@ def login():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        sql_check = "SELECT * FROM facevote WHERE name = %s AND vote = 0" % (name,)
-        cursor.execute(sql_check)
+        sql_check = "SELECT * FROM facevote WHERE name = %s AND vote = 0" %
+        cursor.execute(sql_check, (name,0,))
         result = cursor.fetchone()
 
         cursor.close()
