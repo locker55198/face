@@ -59,7 +59,7 @@ def login():
         cursor.close()
         conn.close()
 
-        if result and result['vote'] > 0:
+        if result and result['vote'] == 0:
             return redirect('/vote')
         else:
             return render_template('login.html', error='Invalid login')
