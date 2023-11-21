@@ -8,16 +8,19 @@
     <h1 style="text-align: center; color: aliceblue;">Face Votering System</h1>
     <hr>
     <h2 style="text-align: center; font-size: 40px;">Register</h2>
-    <div style="text-align: center;">
+    
         <form id="registerForm" action="/register" method="POST">
+            <div style="text-align: center;">
             <input type="text" id="name" name="name"  placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
             <button type="submit" onclick="showAlert()" style="background-color: green; color: aliceblue; font-size: 20px; padding: 10px; position: relative; z-index: 1;">Register</button><br><br>
+            </div>
             <div style="position: absolute; top: 150px; left: 150px; background-color: #666;">
             <video id="video" width="600" height="500" autoplay></video>
             <br>
         </div>
         <button onclick="captureImage()" style="background-color: green; color:aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 380px;">Capture</button>
         </form>
+    <div style="text-align: center;">
         <button type="button" onclick="location.href='/'" style="font-size: 20px; position: relative; z-index: 1;">Back</button>
     </div>
 
