@@ -8,3 +8,13 @@ def get_db_connection():
         database='fyp'
     )
     return conn
+
+def update_vote(candidate):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("UPDATE facevote SET vote = %s", (candidate,))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
