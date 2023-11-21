@@ -52,20 +52,20 @@ def login():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        sql_check = "SELECT * FROM facevote WHERE name = %s"
+        sql_check = "SELECT * FROM facevote WHERE name = ?"
         cursor.execute(sql_check, (name,))
         result = cursor.fetchone()
 
         cursor.close()
         conn.close()
 
-        if result:
+        if result and result['vote'] > 0:
             return redirect('/vote')
         else:
             return render_template('login.html', error='Invalid login')
 
     return render_template('login.html')
-
+   
 @app.route('/vote', methods=['GET', 'POST'])
 def vote():
     if request.method == 'POST':
