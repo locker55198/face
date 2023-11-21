@@ -71,7 +71,6 @@ def vote():
     if request.method == 'POST':
         vote = request.form.get('candidate')
         if vote in ['1', '2']:
-            try:
             conn = get_db_connection()
             cursor = conn.cursor()
             sql = "INSERT INTO facevote (vote) VALUES (%s)"
