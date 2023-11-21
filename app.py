@@ -70,11 +70,11 @@ def login():
 def vote():
     if request.method == 'POST':
         candidate = request.form.get('candidate')
-        if candidate:
+        if candidate in ['1', '2']:
             conn = get_db_connection()
             cursor = conn.cursor()
             sql = "INSERT INTO facevote (vote) VALUES (%s)"
-            cursor.execute(sql, (vote,))
+            cursor.execute(sql, (candidate,))
             conn.commit()
             cursor.close()
             conn.close()
@@ -82,7 +82,7 @@ def vote():
             return redirect('/')
         else:
             flash('Invalid vote.', 'error')
-            return redirect('/')
+            return redirect('/vote')
     
     return render_template('vote.html')
 
