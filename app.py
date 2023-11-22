@@ -1,5 +1,6 @@
 import os
 import base64
+import hashlib
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session
 from connect import get_db_connection
 
@@ -25,8 +26,10 @@ def register():
         name = request.form['name']
         image_blob = request.form.get('image')
         image_data = base64.b64decode(image_blob)
-        sql_check = "SELECT * FROM facevote WHERE name = %s"
-        cursor.execute(sql_check, (name,))
+        image_hash = hashlib.sha256(image_data).hexdigest()
+       
+        sql_check = "SELECT * FROM facevote WHERE image_hash = %s"
+        cursor.execute(sql_check, (image_hash,))
         result = cursor.fetchone()
 
         if result:
@@ -35,8 +38,8 @@ def register():
             return redirect(url_for('register', error_message='Name already exists. Please choose a different name'))
         else:
             
-            sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
-            cursor.execute(sql, (name,image_data))
+            sql = "INSERT INTO facevote (name, image_hash) VALUES (%s, %s)"
+            cursor.execute(sql, (name,image_hash))
             conn.commit()
             cursor.close()
             conn.close()
