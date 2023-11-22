@@ -23,31 +23,18 @@ def register():
 
     if request.method == 'POST':
         name = request.form['name']
-        
-        
-        sql_check = "SELECT * FROM facevote WHERE name = %s"
-        cursor.execute(sql_check, (name,))
-        result = cursor.fetchone()
-       
-        if result:
-            cursor.close()
-            conn.close()
-            return redirect(url_for('register', error_message='Image already exists. Please choose a different image'))
-        else:
-           
             
-            sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
-            cursor.execute(sql, (name, image))
-            conn.commit()
-            cursor.close()
-            conn.close()
-            return redirect(url_for('index', success_message='Registration successful'))
+         sql = "INSERT INTO facevote (name) VALUES (%s)"
+         cursor.execute(sql, (name,))
+         conn.commit()
+         cursor.close()
+         conn.close()
+         return redirect(url_for('index', success_message='Registration successful'))
            
-            cursor.close()
-            conn.close()
+         cursor.close()
+         conn.close()
  
-   
-            return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
+         return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
    
 @app.route('/login', methods=['GET', 'POST'])
 def login():
