@@ -38,7 +38,7 @@ def register():
             return redirect(url_for('register', error_message='Name already exists. Please choose a different name'))
         else:
             
-            sql = "INSERT INTO facevote (name, image_hash) VALUES (%s, %s)"
+            sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
             cursor.execute(sql, (name,image_hash))
             conn.commit()
             cursor.close()
