@@ -1,6 +1,7 @@
 import os
 import base64
 import hashlib
+import numpy as np
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session
 from connect import get_db_connection
 
@@ -26,20 +27,25 @@ def register():
         name = request.form['name']
         image_blob = request.form.get('image')
         image_data = base64.b64decode(image_blob)
-        image_hash = hashlib.sha256(image_data).hexdigest()
+        image_feature = extract_image_feature(image_data)
        
-        sql_check = "SELECT * FROM facevote WHERE image_hash = %s"
-        cursor.execute(sql_check, (image_hash,))
-        result = cursor.fetchone()
+        sql_check = "SELECT * FROM facevote"
+        cursor.execute(sql_check)
+        results = cursor.fetchall()
 
-        if result:
+        for row in results:
+            stored_feature_blob = row[2] 
+            stored_feature = np.frombuffer(stored_feature_blob, dtype=float)  
+            similarity = compute_similarity(image_feature, stored_featur
+
+        if similarity > threshold:
             cursor.close()
             conn.close()
-            return redirect(url_for('register', error_message='Name already exists. Please choose a different name'))
+            return redirect(url_for('register', error_message='Image Already Exists'))
         else:
             
-            sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
-            cursor.execute(sql, (name,image_hash))
+            sql = "INSERT INTO facevote (name, image, feature) VALUES (%s, %s, %s)"
+            cursor.execute(sql, (name, image_blob, image_feature.tobytes()))
             conn.commit()
             cursor.close()
             conn.close()
