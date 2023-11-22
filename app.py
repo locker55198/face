@@ -26,8 +26,9 @@ def register():
     if request.method == 'POST':
         name = request.form['name']
         image_blob = request.form.get('image')
+       
         image_data = base64.b64decode(image_blob)
-        image_feature = extract_image_feature(image_data)
+        image_feature = process_image(image_data)
        
         sql_check = "SELECT feature FROM facevote"
         cursor.execute(sql_check)
