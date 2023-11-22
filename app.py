@@ -34,7 +34,7 @@ def register():
             conn.close()
             return redirect(url_for('register', error_message='Image already exists. Please choose a different image'))
         else:
-            image = base64.b64decode(image_data.split(',')[2])
+           
             
             sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
             cursor.execute(sql, (name, image))
