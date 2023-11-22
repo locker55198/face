@@ -8,3 +8,4 @@ onnxruntime
 waitress
 pillow
 numpy
+mediapipe
