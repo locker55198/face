@@ -28,25 +28,18 @@ def register():
         image_blob = request.form.get('image')
        
         image_data = base64.b64decode(image_blob)
-        image_feature = process_image(image_data)
-       
-        sql_check = "SELECT feature FROM facevote"
-        cursor.execute(sql_check)
-        results = cursor.fetchall()
+        sql_check = "SELECT * FROM facevote WHERE name = %s"
+        cursor.execute(sql_check, (name,))
+        result = cursor.fetchone()
 
-        for result in results:
-            stored_feature_blob = row[3] 
-            stored_feature = np.frombuffer(stored_feature_blob, dtype=float)
-            similarity = compute_similarity(image_feature, stored_feature)
-
-        if similarity > threshold:
+        if result:
             cursor.close()
             conn.close()
             return redirect(url_for('register', error_message='Image Already Exists'))
         else:
             
-            sql = "INSERT INTO facevote (name, image, feature) VALUES (%s, %s, %s)"
-            cursor.execute(sql_insert, (name, image_blob, image_feature.tobytes()))
+            sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
+            cursor.execute(sql, (name, image_data))
             conn.commit()
             cursor.close()
             conn.close()
