@@ -16,11 +16,11 @@
             </div>
             <div style="position: relative; margin-top: -200px; margin-left: 60px;">
             <video id="video" width="600" height="500" autoplay></video>
-            <img id="capturedImage" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;">
+            <img id="image" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;">
             </div>
-            
+             <button onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>
         </form>
-    <button onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>
+   
     <div style="text-align: center;">
         <button type="button" onclick="location.href='/'" style="font-size: 20px; position: relative; z-index: 1;">Back</button>
     </div>
@@ -61,17 +61,17 @@
             capturedImage.style.height = video.offsetHeight + 'px';
 
             // 將圖像和姓名作為表單數據發送到後端進行處理
-            // var form = new FormData(document.getElementById('registerForm'));
-            // form.append('image', image);
-            // form.append('name', name);
-            // var xhr = new XMLHttpRequest();
-            // xhr.open('POST', '/register', true);
-            // xhr.onreadystatechange = function() {
-            //     if (xhr.readyState === 4 && xhr.status === 200) {
-            //         console.log('姓名和圖像已發送到後端');
-            //     }
-            // };
-            // xhr.send(form);
+            var form = new FormData(document.getElementById('registerForm'));
+            form.append('image', image);
+            form.append('name', name);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/register', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log('姓名和圖像已發送到後端');
+                }
+            };
+            xhr.send(form);
         }
         
     function showAlert() {
