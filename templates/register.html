@@ -12,14 +12,16 @@
         <form id="registerForm" action="/register" method="POST">
             <div style="text-align: center;">
             <input type="text" id="name" name="name"  placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
+            <input type="hidden" id="imageBlob" name="image" value="" />
             <button type="submit" onclick="showAlert()" style="background-color: green; color: aliceblue; font-size: 20px; padding: 10px; position: relative; z-index: 1;">Register</button><br><br>
             </div>
+            <button onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>
         </form>
         <div style="position: relative; margin-top: -200px; margin-left: 60px;">
             <video id="video" width="600" height="500" autoplay></video>
             <img id="captureImage" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;">
             </div>
-       <button onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>
+       
         <div style="text-align: center;">
             <button type="button" onclick="location.href='/'" style="font-size: 20px; position: relative; z-index: 1;">Back</button>
         </div>
@@ -49,9 +51,6 @@
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             var image = canvas.toDataURL('image/jpeg');
 
-            // 獲取使用者輸入的姓名
-            var name = document.getElementById('name').value;
-
             // 將圖像顯示在圖像元素中
             var captureImage = document.getElementById('captureImage');
             captureImage.src = image;
@@ -59,18 +58,9 @@
             captureImage.style.width = video.offsetWidth + 'px';
             captureImage.style.height = video.offsetHeight + 'px';
 
-            將圖像和姓名作為表單數據發送到後端進行處理
-            var form = new FormData(document.getElementById('registerForm'));
-            form.append('image', image);
-            form.append('name', name);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/register', true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    console.log('姓名和圖像已發送到後端');
-                }
-            };
-            xhr.send(form);
+            // 將圖像數據轉換為base64編碼的字符串
+            var imageBlobField = document.getElementById('imageBlob');
+            imageBlobField.value = image;
         }
         
     function showAlert() {
