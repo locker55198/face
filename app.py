@@ -23,7 +23,7 @@ def register():
 
     if request.method == 'POST':
         name = request.form['name']
-        image_data = request.form['image']
+        
         
         sql_check = "SELECT * FROM facevote WHERE name = %s"
         cursor.execute(sql_check, (name,))
