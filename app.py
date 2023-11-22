@@ -20,8 +20,6 @@ def favicon():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    conn = get_db_connection()
-    cursor = conn.cursor()
 
     if request.method == 'POST':
         name = request.form['name']
