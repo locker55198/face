@@ -23,6 +23,7 @@ def register():
 
     if request.method == 'POST':
         name = request.form['name']
+        image = request.files['image'].read()
 
         sql_check = "SELECT * FROM facevote WHERE name = %s"
         cursor.execute(sql_check, (name,))
@@ -33,8 +34,8 @@ def register():
             conn.close()
             return redirect(url_for('register', error_message='Name already exists. Please choose a different name'))
         else:
-            sql = "INSERT INTO facevote (name) VALUES (%s)"
-            cursor.execute(sql, (name,))
+            sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
+            cursor.execute(sql, (name,image))
             conn.commit()
             cursor.close()
             conn.close()
