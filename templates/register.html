@@ -38,7 +38,36 @@
                     console.log('No Cam:', error);
                 });
         }
-    
+
+    canvas.width = captureWidth;
+            canvas.height = captureHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var image = canvas.toDataURL('image/jpeg');
+
+            // 獲取使用者輸入的姓名
+            var name = document.getElementById('name').value;
+
+            // 將圖像顯示在圖像元素中
+            var capturedImage = document.getElementById('capturedImage');
+            capturedImage.src = image;
+            capturedImage.style.display = 'block';
+            capturedImage.style.width = video.offsetWidth + 'px';
+            capturedImage.style.height = video.offsetHeight + 'px';
+
+            將圖像和姓名作為表單數據發送到後端進行處理
+            var form = new FormData(document.getElementById('registerForm'));
+            form.append('image', image);
+            form.append('name', name);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/register', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log('姓名和圖像已發送到後端');
+                }
+            };
+            xhr.send(form);
+
+        
     function showAlert() {
         alert('Register Suggest');
     }
