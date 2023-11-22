@@ -39,7 +39,6 @@ def register():
         else:
             image_data = base64.b64decode(image_blob)
             sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
-            cursor.execute(sql, (name,image.read()))
             cursor.execute(sql, (name,image_data))
             conn.commit()
             cursor.close()
