@@ -54,11 +54,11 @@
             var name = document.getElementById('name').value;
 
             // 將圖像顯示在圖像元素中
-            var capturedImage = document.getElementById('capturedImage');
-            capturedImage.src = image;
-            capturedImage.style.display = 'block';
-            capturedImage.style.width = video.offsetWidth + 'px';
-            capturedImage.style.height = video.offsetHeight + 'px';
+            var captureImage = document.getElementById('captureImage');
+            captureImage.src = image;
+            captureImage.style.display = 'block';
+            captureImage.style.width = video.offsetWidth + 'px';
+            captureImage.style.height = video.offsetHeight + 'px';
 
             // 將圖像和姓名作為表單數據發送到後端進行處理
             var form = new FormData(document.getElementById('registerForm'));
