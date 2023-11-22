@@ -39,7 +39,12 @@
                 });
         }
 
-    canvas.width = captureWidth;
+             function captureImage() {
+            var captureWidth = 600; // 調整為所需的寬度
+            var captureHeight = 500; // 調整為所需的高度
+
+            // 設定畫布的寬度和高度
+            canvas.width = captureWidth;
             canvas.height = captureHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             var image = canvas.toDataURL('image/jpeg');
@@ -66,7 +71,7 @@
                 }
             };
             xhr.send(form);
-
+        }
         
     function showAlert() {
         alert('Register Suggest');
