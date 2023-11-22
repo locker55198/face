@@ -20,6 +20,34 @@ def favicon():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        name = request.form['name']
+        image_data = request.form['image']
+        
+        sql_check = "SELECT * FROM facevote WHERE image = %s"
+        cursor.execute(sql_check, (image_data,))
+        result = cursor.fetchone()
+       
+        if result:
+            cursor.close()
+            conn.close()
+            return redirect(url_for('register', error_message='Image already exists. Please choose a different image'))
+        else:
+            image = base64.b64decode(image_data.split(',')[1])
+            
+            sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
+            cursor.execute(sql, (name, image))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return redirect(url_for('index', success_message='Registration successful'))
+           
+            cursor.close()
+            conn.close()
+ 
    
             return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
    
