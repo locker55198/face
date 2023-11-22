@@ -25,9 +25,23 @@
     </div>
 
     <script>
+    var video = document.getElementById('video');
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    video.srcObject = stream;
+                })
+                .catch(function(error) {
+                    console.log('No Cam:', error);
+                });
+        }
+    
     function showAlert() {
-        alert('Register Fail');
-}
+        alert('Register Suggest');
+    }
     </script>
 
     <style>
