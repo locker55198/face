@@ -8,7 +8,13 @@
     <h1 style="text-align: center; color: aliceblue;">Face Votering System</h1>
     <hr>
     <h2 style="text-align: center; font-size: 40px;">Register</h2>
+        {% if success_message %}
+        <p>{{ success_message }}</p>
+        {% endif %}
     
+        {% if error_message %}
+        <p>{{ error_message }}</p>
+        {% endif %}
         <form id="registerForm" action="/register" method="POST">
             <div style="text-align: center;">
             <input type="text" id="name" name="name"  placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
@@ -63,9 +69,9 @@
             imageBlobField.value = image;
         }
         
-    function showAlert() {
-        alert('Register Suggest');
-    }
+    // function showAlert() {
+    //     alert('Register Suggest');
+    // }
     </script>
 
     <style>
