@@ -8,4 +8,3 @@ onnxruntime
 waitress
 pillow
 numpy
-face_recognition
