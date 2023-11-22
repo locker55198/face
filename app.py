@@ -29,14 +29,14 @@ def register():
         image_data = base64.b64decode(image_blob)
         image_feature = extract_image_feature(image_data)
        
-        sql_check = "SELECT * FROM facevote"
+        sql_check = "SELECT feature FROM facevote"
         cursor.execute(sql_check)
         results = cursor.fetchall()
 
-        for row in results:
-            stored_feature_blob = row[2] 
-            stored_feature = np.frombuffer(stored_feature_blob, dtype=float)  
-            similarity = compute_similarity(image_feature, stored_featur
+        for result in results:
+            stored_feature_blob = row[3] 
+            stored_feature = np.frombuffer(stored_feature_blob, dtype=float)
+            similarity = compute_similarity(image_feature, stored_feature)
 
         if similarity > threshold:
             cursor.close()
@@ -45,7 +45,7 @@ def register():
         else:
             
             sql = "INSERT INTO facevote (name, image, feature) VALUES (%s, %s, %s)"
-            cursor.execute(sql, (name, image_blob, image_feature.tobytes()))
+            cursor.execute(sql_insert, (name, image_blob, image_feature.tobytes()))
             conn.commit()
             cursor.close()
             conn.close()
