@@ -20,12 +20,13 @@
             </div>
             <button onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>
         </form>
+    
     <div style="text-align: center;">
         <button type="button" onclick="location.href='/'" style="font-size: 20px; position: relative; z-index: 1;">Back</button>
     </div>
 
     <script>
-    var video = document.getElementById('video');
+       var video = document.getElementById('video');
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
 
@@ -39,7 +40,7 @@
                 });
         }
 
-             function captureImage() {
+        function captureImage() {
             var captureWidth = 600; // 調整為所需的寬度
             var captureHeight = 500; // 調整為所需的高度
 
@@ -59,18 +60,18 @@
             capturedImage.style.width = video.offsetWidth + 'px';
             capturedImage.style.height = video.offsetHeight + 'px';
 
-            將圖像和姓名作為表單數據發送到後端進行處理
-            var form = new FormData(document.getElementById('registerForm'));
-            form.append('image', image);
-            form.append('name', name);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/register', true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    console.log('姓名和圖像已發送到後端');
-                }
-            };
-            xhr.send(form);
+            // 將圖像和姓名作為表單數據發送到後端進行處理
+            // var form = new FormData(document.getElementById('registerForm'));
+            // form.append('image', image);
+            // form.append('name', name);
+            // var xhr = new XMLHttpRequest();
+            // xhr.open('POST', '/register', true);
+            // xhr.onreadystatechange = function() {
+            //     if (xhr.readyState === 4 && xhr.status === 200) {
+            //         console.log('姓名和圖像已發送到後端');
+            //     }
+            // };
+            // xhr.send(form);
         }
         
     function showAlert() {
