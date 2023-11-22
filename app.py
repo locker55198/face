@@ -27,8 +27,8 @@ def register():
         name = request.form['name']
         image_data = request.form['image']
         
-        sql_check = "SELECT * FROM facevote WHERE image = %s"
-        cursor.execute(sql_check, (image_data,))
+        sql_check = "SELECT * FROM facevote WHERE name = %s"
+        cursor.execute(sql_check, (name,))
         result = cursor.fetchone()
        
         if result:
@@ -36,7 +36,7 @@ def register():
             conn.close()
             return redirect(url_for('register', error_message='Image already exists. Please choose a different image'))
         else:
-            image = base64.b64decode(image_data.split(',')[1])
+            image = base64.b64decode(image_data.split(',')[2])
             
             sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
             cursor.execute(sql, (name, image))
