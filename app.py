@@ -24,6 +24,7 @@ def register():
         name = request.form['name']
         image_base64 = request.form['image']
 
+        # 将Base64编码的图像数据解码为字节流
         image_data = b64decode(image_base64)
         
         conn = get_db_connection()
