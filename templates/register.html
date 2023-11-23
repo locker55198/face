@@ -19,6 +19,7 @@
         </form>
         <div style="position: relative; margin-top: -200px; margin-left: 60px;">
             <video id="video" width="600" height="500" autoplay></video>
+            <canvas id="canvas" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;"></canvas>
             <img id="captureImage" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;">
             </div>
        
@@ -28,7 +29,7 @@
 
     <script>
        var video = document.getElementById('video');
-        var canvas = document.createElement('canvas');
+        var canvas = document.getElementById('canvas');
         var context = canvas.getContext('2d');
 
         if (navigator.mediaDevices.getUserMedia) {
@@ -42,23 +43,23 @@
         }
 
         function captureImage() {
-            var captureWidth = 600; // 調整為所需的寬度
-            var captureHeight = 500; // 調整為所需的高度
+            var captureWidth = 600; // 调整为所需的宽度
+            var captureHeight = 500; // 调整为所需的高度
 
-            // 設定畫布的寬度和高度
+            // 设置画布的宽度和高度
             canvas.width = captureWidth;
             canvas.height = captureHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             var image = canvas.toDataURL('image/jpeg');
 
-            // 將圖像顯示在圖像元素中
+            // 将图像显示在图像元素中
             var captureImage = document.getElementById('captureImage');
             captureImage.src = image;
             captureImage.style.display = 'block';
             captureImage.style.width = video.offsetWidth + 'px';
             captureImage.style.height = video.offsetHeight + 'px';
 
-            // 將圖像數據轉換為base64編碼的字符串
+            // 将图像数据转换为base64编码的字符串
             var imageBlobField = document.getElementById('imageBlob');
             imageBlobField.value = image;
         }
