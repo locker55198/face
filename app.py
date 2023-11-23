@@ -49,42 +49,105 @@ def register():
 
     return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
    
-def detect_faces(image_data):
-    image_array = np.frombuffer(image_data, np.uint8)
-    image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
-    
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-    
-    return len(faces)
+def compare_images(image1, image2):
+    # 将图像转换为灰度图像
+    gray1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
+    gray2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+
+    # 计算图像的直方图
+    hist1 = cv2.calcHist([gray1], [0], None, [256], [0, 256])
+    hist2 = cv2.calcHist([gray2], [0], None, [256], [0, 256])
+
+    # 计算直方图的差异
+    diff = cv2.compareHist(hist1, hist2, cv2.HISTCMP_CORREL)
+
+    return diff
+
+def save_image_to_database(name, image):
+    # 将图像转换为字节流
+    image_bytes = cv2.imencode('.jpg', image)[1].tobytes()
+
+    # 连接到数据库
+    conn = connect_to_database()
+    cursor = conn.cursor()
+
+    # 插入图像数据到数据库
+    sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
+    val = (name, image_bytes)
+    cursor.execute(sql, val)
+
+    # 提交事务
+    conn.commit()
+
+    # 关闭游标
+    cursor.close()
+
+    # 关闭数据库连接
+    conn.close()
+
+def get_images_from_database():
+    # 连接到数据库
+    conn = connect_to_database()
+    cursor = conn.cursor()
+
+    # 从数据库中获取图像数据
+    sql = "SELECT id, name, image FROM facevote"
+    cursor.execute(sql)
+
+    # 获取所有图像数据
+    images = cursor.fetchall()
+
+    # 关闭游标
+    cursor.close()
+
+    # 关闭数据库连接
+    conn.close()
+
+    return images
+
+def connect_to_database():
+    # 连接到MySQL数据库
+    conn = mysql.connector.connect(
+        host="fyp.mysql.database.azure.com",
+        user="ming",
+        password="P@ssw0rd",
+        database="fyp"
+    )
+
+    return conn
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        # 获取用户上传的图像文件和用户名
+        user_image = request.files['user_image']
         name = request.form['name']
-        image_data = request.form['image']
-        
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        num_faces = detect_faces(image_data)
-        
-        if num_faces == 1:
-            sql_check = "SELECT * FROM facevote WHERE name = %s and vote = 0"
-            cursor.execute(sql_check, (name,))
-            result = cursor.fetchone()
-            
-            if result:
-                session['name'] = name
-                cursor.close()
-                conn.close()
-                return redirect(url_for('vote', success_message='Login successful'))
-        
-        return render_template('login.html', error='Invalid login')
-    
+        if user_image and name:
+            # 读取用户上传的图像文件
+            img = cv2.imdecode(np.fromstring(user_image.read(), np.uint8), cv2.IMREAD_COLOR)
+
+            # 保存图像到数据库
+            save_image_to_database(name, img)
+
+            # 比较图像
+            authenticated = False
+            db_images = get_images_from_database()
+            for db_image in db_images:
+                # 将数据库中的图像数据转换为图像
+                db_img = cv2.imdecode(np.frombuffer(db_image[2], np.uint8), cv2.IMREAD_COLOR)
+
+                # 比较图像
+                similarity = compare_images(db_img, img)
+
+                if similarity > 0.8:  # 设置相似度阈值
+                    authenticated = True
+                    break
+
+            if authenticated:
+                return "Login successful"
+                return redirect(url_for('vote', success_message='Vote successful'))
+            else:
+                return "Login failed"
     return render_template('login.html')
    
 @app.route('/vote', methods=['GET', 'POST'])
