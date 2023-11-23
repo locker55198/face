@@ -1,5 +1,5 @@
 import os
-import base64
+from base64 import b64decode
 import hashlib
 import numpy as np
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session
@@ -22,6 +22,9 @@ def favicon():
 def register():
     if request.method == 'POST':
         name = request.form['name']
+        image_base64 = request.form['image']
+
+        image_data = b64decode(image_base64)
         
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -35,8 +38,8 @@ def register():
             conn.close()
             return redirect(url_for('register', error_message='Name already exists. Please choose a different name'))
         else:
-            sql = "INSERT INTO facevote (name) VALUES (%s)"
-            cursor.execute(sql, (name,))
+            sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
+            cursor.execute(sql, (name, image_data))
             conn.commit()
             cursor.close()
             conn.close()
