@@ -21,18 +21,8 @@ def favicon():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 
-    if request.method == 'POST':
-        name = request.form['name']
-            
-         sql = "INSERT INTO facevote (name) VALUES (%s)"
-         cursor.execute(sql, (name,))
-         conn.commit()
-         cursor.close()
-         conn.close()
-         return redirect(url_for('index', success_message='Registration successful'))
-           
-         cursor.close()
-         conn.close()
+    conn = get_db_connection()
+    cursor = conn.cursor()
  
          return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
    
