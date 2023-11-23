@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Face Votering System</title>
+    <title>Face Voting System</title>
 </head>
 
 <body>
-    <h1 style="text-align: center; color: aliceblue;">Face Votering System</h1>
+    <h1 style="text-align: center; color: aliceblue;">Face Voting System</h1>
     <hr>
     <h2 style="text-align: center; font-size: 40px;">Register</h2>
         
-        <form id="registerForm" action="/register" method="POST">
-            <div style="text-align: center;">
-            <input type="text" id="name" name="name"  placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
-            <input type="hidden" id="imageBlob" name="image" value="" />
-            <button type="submit" onclick="showAlert()" style="background-color: green; color: aliceblue; font-size: 20px; padding: 10px; position: relative; z-index: 1;">Register</button><br><br>
-            </div>
-            <button type="button" onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>
-        </form>
-        <div style="position: relative; margin-top: -200px; margin-left: 60px;">
-            <video id="video" width="600" height="500" autoplay></video>
-            <canvas id="canvas" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;"></canvas>
-            <img id="captureImage" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;">
-            </div>
-       
+    <form id="registerForm" action="/register" method="POST">
         <div style="text-align: center;">
-            <button type="button" onclick="location.href='/'" style="font-size: 20px; position: relative; z-index: 1;">Back</button>
+            <input type="text" id="name" name="name" placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
+            <input type="hidden" id="imageBlob" name="image" value="" />
+            <button type="submit" style="background-color: green; color: aliceblue; font-size: 20px; padding: 10px; position: relative; z-index: 1;">Register</button><br><br>
         </div>
+        <button type="button" onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>
+    </form>
+
+    <div style="position: relative; margin-top: -200px; margin-left: 60px;">
+        <video id="video" width="600" height="500" autoplay></video>
+        <canvas id="canvas" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;"></canvas>
+        <img id="captureImage" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;">
+    </div>
+
+    <div style="text-align: center;">
+        <button type="button" onclick="location.href='/'" style="font-size: 20px; position: relative; z-index: 1;">Back</button>
+    </div>
 
     <script>
-       var video = document.getElementById('video');
+        var video = document.getElementById('video');
         var canvas = document.getElementById('canvas');
         var context = canvas.getContext('2d');
 
@@ -63,10 +64,6 @@
             var imageBlobField = document.getElementById('imageBlob');
             imageBlobField.value = image;
         }
-        
-    // function showAlert() {
-    //     alert('Register Suggest');
-    // }
     </script>
 
     <style>
