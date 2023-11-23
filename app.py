@@ -68,7 +68,12 @@ def save_image_to_database(name, image):
     image_bytes = cv2.imencode('.jpg', image)[1].tobytes()
 
     # 连接到数据库
-    conn = connect_to_database()
+    conn = mysql.connector.connect(
+        host="your_host",
+        user="your_username",
+        password="your_password",
+        database="your_database"
+    )
     cursor = conn.cursor()
 
     # 插入图像数据到数据库
@@ -87,7 +92,12 @@ def save_image_to_database(name, image):
 
 def get_images_from_database():
     # 连接到数据库
-    conn = connect_to_database()
+    conn = mysql.connector.connect(
+        host="your_host",
+        user="your_username",
+        password="your_password",
+        database="your_database"
+    )
     cursor = conn.cursor()
 
     # 从数据库中获取图像数据
@@ -105,43 +115,41 @@ def get_images_from_database():
 
     return images
 
-def connect_to_database():
-    # 连接到MySQL数据库
-    conn = mysql.connector.connect(
-        host="fyp.mysql.database.azure.com",
-        user="ming",
-        password="P@ssw0rd",
-        database="fyp"
-    )
+def capture_image_from_webcam():
+    cap = cv2.VideoCapture(0)  # 打开摄像头
+    ret, frame = cap.read()  # 读取摄像头帧
 
-    return conn
+    if ret:
+        cap.release()  # 释放摄像头
+        return frame
 
-@app.route('/login', methods=['GET', 'POST'])
+    return None
+
+@app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # 获取用户上传的图像文件和用户名
-        user_image = request.files['user_image']
+        # 获取用户名
         name = request.form['name']
-        if user_image and name:
-            # 读取用户上传的图像文件
-            img = cv2.imdecode(np.fromstring(user_image.read(), np.uint8), cv2.IMREAD_COLOR)
+        if name:
+            # 从摄像头捕获图像
+            img = capture_image_from_webcam()
 
-            # 保存图像到数据库
-            save_image_to_database(name, img)
-
-            # 比较图像
-            authenticated = False
-            db_images = get_images_from_database()
-            for db_image in db_images:
-                # 将数据库中的图像数据转换为图像
-                db_img = cv2.imdecode(np.frombuffer(db_image[2], np.uint8), cv2.IMREAD_COLOR)
+            if img is not None:
+                # 保存图像到数据库
+                save_image_to_database(name, img)
 
                 # 比较图像
-                similarity = compare_images(db_img, img)
+                authenticated = False
+                db_images = get_images_from_database()
+                for db_image in db_images:
+                    # 将数据库中的图像数据转换为图像
+                    db_img = cv2.imdecode(np.frombuffer(db_image[2], np.uint8), cv2.IMREAD_COLOR)
 
-                if similarity > 0.8:  # 设置相似度阈值
-                    authenticated = True
-                    break
+                    # 比较图像
+                    similarity = compare_images(db_img, img)
+
+                    if similarity > 0.8:  # 设置相似度阈值
+                        authentic
 
             if authenticated:
                 return "Login successful"
