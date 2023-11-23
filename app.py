@@ -20,9 +20,6 @@ def favicon():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
  
          return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
    
