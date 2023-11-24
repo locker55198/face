@@ -44,23 +44,20 @@
         }
 
         function captureImage() {
-            var captureWidth = 600; // 调整为所需的宽度
-            var captureHeight = 500; // 调整为所需的高度
-
-            // 设置画布的宽度和高度
+            var captureWidth = 600;
+            var captureHeight = 500;
+            
             canvas.width = captureWidth;
             canvas.height = captureHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             var image = canvas.toDataURL('image/jpeg');
 
-            // 将图像显示在图像元素中
             var captureImage = document.getElementById('captureImage');
             captureImage.src = image;
             captureImage.style.display = 'block';
             captureImage.style.width = video.offsetWidth + 'px';
             captureImage.style.height = video.offsetHeight + 'px';
 
-            // 将图像数据转换为base64编码的字符串
             var imageBlobField = document.getElementById('imageBlob');
             imageBlobField.value = image;
         }
@@ -68,7 +65,7 @@
 
     <style>
         body {
-            background-image: url('{{ url_for('static', filename='images/vote.jpg') }}');
+            background-image: url("{{ url_for('static', filename='images/vote.jpg') }}");
             background-size: cover;
             background-repeat: no-repeat;
         }
