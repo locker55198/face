@@ -55,6 +55,11 @@ def register():
 def login():
     if request.method == 'POST':
         name = request.form['name']
+        image_base64 = request.form['image']
+
+        image_data = np.frombuffer(b64decode(image_base64), np.uint8)
+        image = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
+       
         conn = get_db_connection()
         cursor = conn.cursor()
         sql_check = "SELECT * FROM facevote WHERE name = %s and vote = 0"
