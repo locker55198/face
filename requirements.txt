@@ -8,3 +8,5 @@ onnxruntime
 waitress
 pillow
 numpy
+opencv-contrib-python
+mysql-connector
