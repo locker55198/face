@@ -3,9 +3,6 @@ gunicorn
 mysql-connector-python
 cvzone
 opencv-python
-psycopg2
-onnxruntime
-waitress
 pillow
 numpy
 opencv-contrib-python
