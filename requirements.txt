@@ -1,0 +1,9 @@
+Flask
+gunicorn
+mysql-connector-python
+cvzone
+opencv-python
+pillow
+numpy
+opencv-contrib-python
+mysql-connector
