@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'facevotefyp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7E6E7D85D62C4B52966EE7E5A42781AE }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FFF622CAFAAE49F6BF8E74944B918921 }}
