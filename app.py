@@ -53,8 +53,39 @@ def register():
    
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    
+    if request.method == 'POST':
+        name = request.form['name']
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        sql_check = "SELECT * FROM facevote WHERE name = %s and vote = 0"
+        cursor.execute(sql_check, (name,))
+        result = cursor.fetchone()
+        if result:
+            session['name'] = name
+            cursor.close()
+            conn.close()
+            return redirect(url_for('vote', success_message='Login successful'))
+        else:
+            return render_template('login.html', error='Invalid login')
     return render_template('login.html')
+   
+@app.route('/vote', methods=['GET', 'POST'])
+def vote():
+    if request.method == 'POST':
+        candidate = request.form['vote']
+        name = session.get('name')
+        if name is None:
+            return redirect(url_for('login'))
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        sql_update = "UPDATE facevote SET vote = %s WHERE name = %s"
+        cursor.execute(sql_update, (candidate, name))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return redirect(url_for('index', success_message='Vote successful'))
+    return render_template('vote.html')
+
    
 @app.route('/video_feed')
 def video_feed():
