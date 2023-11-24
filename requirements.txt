@@ -7,3 +7,4 @@ pillow
 numpy
 opencv-contrib-python
 mysql-connector
+deepface
