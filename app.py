@@ -69,10 +69,10 @@ def save_image_to_database(name, image):
 
     # 连接到数据库
     conn = mysql.connector.connect(
-        host="your_host",
-        user="your_username",
-        password="your_password",
-        database="your_database"
+        host="fyp.mysql.database.azure.com",
+        user="ming",
+        password="P@ssw0rd",
+        database="fyp"
     )
     cursor = conn.cursor()
 
@@ -93,10 +93,10 @@ def save_image_to_database(name, image):
 def get_images_from_database():
     # 连接到数据库
     conn = mysql.connector.connect(
-        host="your_host",
-        user="your_username",
-        password="your_password",
-        database="your_database"
+        host="fyp.mysql.database.azure.com",
+        user="ming",
+        password="P@ssw0rd",
+        database="fyp"
     )
     cursor = conn.cursor()
 
