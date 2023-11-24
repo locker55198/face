@@ -19,6 +19,7 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -48,6 +49,37 @@ def register():
             return redirect(url_for('index', success_message='Registration successful'))
 
     return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
+   
+def generate_frames():
+    while True:
+        frame = get_frame_with_overlay()
+        ret, buffer = cv2.imencode('.jpg', frame)
+        frame = buffer.tobytes()
+
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+def get_frame_with_overlay():
+    cap = cv2.VideoCapture(0)
+
+    if not cap.isOpened():
+        raise RuntimeError("Error")
+
+    ret, frame = cap.read()
+
+    if ret:
+        if is_face_matched():
+            cv2.putText(frame, "MATCH!", (20, 450), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
+        else:
+            cv2.putText(frame, "NO MATCH!", (20, 450), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 3)
+
+    cap.release()
+
+    return frame
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
    
 if __name__ == '__main__':
     app.debug = True
