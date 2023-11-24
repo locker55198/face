@@ -77,7 +77,12 @@ def get_frame_with_overlay():
     cap.release()
 
     return frame
-
+   
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    
+    return render_template('login.html')
+   
 @app.route('/video_feed')
 def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
