@@ -11,4 +11,3 @@ numpy
 opencv-contrib-python
 mysql-connector
 deepface
-threaded
