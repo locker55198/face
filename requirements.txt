@@ -12,4 +12,4 @@ opencv-contrib-python
 mysql-connector
 tensorflow
 keras
-deepface
+
