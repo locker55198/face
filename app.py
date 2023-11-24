@@ -125,7 +125,7 @@ def capture_image_from_webcam():
 
     return None
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         # 获取用户名
