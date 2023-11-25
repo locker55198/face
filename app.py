@@ -119,7 +119,6 @@ def login():
             return redirect(url_for('vote', success_message='Login successful'))
         else:
             return render_template('login.html', error='Invalid login')
-        return redirect(url_for('vote', success_message='Login successful'))
     
     return render_template('login.html')
 
