@@ -108,7 +108,17 @@ def login():
         #     return render_template('login.html', error='Invalid login')
 
         # For testing purposes, always redirect to the vote page
-        session['name'] = name
+        sql_check = "SELECT * FROM facevote WHERE name = %s and vote = 0"
+        cursor.execute(sql_check, (name,))
+        result = cursor.fetchone()
+        
+        if result:
+            session['name'] = name
+            cursor.close()
+            conn.close()
+            return redirect(url_for('vote', success_message='Login successful'))
+        else:
+            return render_template('login.html', error='Invalid login')
         return redirect(url_for('vote', success_message='Login successful'))
     
     return render_template('login.html')
