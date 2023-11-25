@@ -3,6 +3,8 @@ from base64 import b64decode
 import numpy as np
 import cv2
 import hashlib
+from io import BytesIO
+from PIL import Image
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session, Response
 from connect import get_db_connection
 from deepface_detection import start_face_detection, is_face_matched
@@ -53,16 +55,30 @@ def register():
         name = request.form['name']
         image_base64 = request.form['image']
 
-        image_data = b64decode(image_base64)
+        image_data = image_base64.encode('utf-8')
+        image_data = b64decode(image_data)
 
         image_hash = hashlib.sha256(image_data).hexdigest()
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        
+        sql_check = "SELECT * FROM facevote WHERE image_hash = %s"
+        cursor.execute(sql_check, (image_hash,))
+        result = cursor.fetchone()
 
-        sql = "INSERT INTO facevote (name, image, imagehash) VALUES (%s, %s, %s)"
+        if result:
+            cursor.close()
+            conn.close()
+            return redirect(url_for('register', error_message='Image already exists for another user'))
+        
+        # 將位元組數據轉換為圖像物件
+        image = Image.open(BytesIO(image_data))
+        
+        # 將圖像物件轉換為位元組數據
+        image_data = image.tobytes()
+
+        sql = "INSERT INTO facevote (name, image, image_hash) VALUES (%s, %s, %s)"
         cursor.execute(sql, (name, image_data, image_hash))
         conn.commit()
         cursor.close()
