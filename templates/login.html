@@ -13,11 +13,11 @@
         <p>{{ error }}</p>
     {% endif %}
     <div id="camera" style="text-align: center"></div>
-    <form action="{{ url_for('login') }}" method="POST" style="position: absolute; top: 700px; left: 580px;>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
+    <form action="{{ url_for('login') }}" method="POST">
+        <label style="position: absolute; top: 780px; left: 700px;" for="name">Name:</label>
+        <input type="text" id="name" name="name" required style="position: absolute; top: 780px; left: 800px;"><br><br>
         <input type="hidden" id="image" name="image" required>
-        <input type="submit" value="Login">
+        <input type="submit" value="Login" style="position: absolute; top: 780px; left: 550px;">
     </form>
 
     <script>
@@ -61,8 +61,8 @@
             </form>
         </div>
         <div>
-            <button onclick="location.href='/'" style="font-size: 20px; position: absolute; padding: 10px; top: 700px; left: 1110px;">Back</button>
-        </div> -->
+            <button onclick="location.href='/'" style="position: absolute; top: 780px; left: 1110px;">Back</button>
+        </div>
         
     </body>
 
