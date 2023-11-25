@@ -12,6 +12,9 @@ app.config['SECRET_KEY'] = 'fypfacevote'
 
 face_cascade = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
 
+face_recognizer = cv2.face.LBPHFaceRecognizer_create()
+face_recognizer.read('models/haarcascade_frontalface_default.xml')
+
 cap = cv2.VideoCapture(0)
 
 def generate_frames():
@@ -74,24 +77,22 @@ def register():
 
     return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
    
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
+if request.method == 'POST':
         name = request.form['name']
         image_base64 = request.form['image']
 
         image_data = np.frombuffer(b64decode(image_base64), np.uint8)
         image = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
-       
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        sql_check = "SELECT * FROM facevote WHERE name = %s and vote = 0"
-        cursor.execute(sql_check, (name,))
-        result = cursor.fetchone()
-        if result:
+    
+        gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+        label, confidence = face_recognizer.predict(gray_image)
+
+        conn.execute("SELECT * FROM facevote WHERE id=?", (label,))
+        user = conn.fetchone()
+
+        if confidence < 100 and user is not None and user[1] == name:
             session['name'] = name
-            cursor.close()
-            conn.close()
             return redirect(url_for('vote', success_message='Login successful'))
         else:
             return render_template('login.html', error='Invalid login')
