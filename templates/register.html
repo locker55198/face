@@ -8,8 +8,10 @@
     <h1 style="text-align: center; color: aliceblue;">Face Voting System</h1>
     <hr>
     <h2 style="text-align: center; font-size: 40px;">Register</h2>
+
+    <img src="{{ url_for('video_feed') }}" width="640" height="480">
         
-    <form id="registerForm" action="/register" method="POST">
+<!--     <form id="registerForm" action="/register" method="POST">
         <div style="text-align: center;">
             <input type="text" id="name" name="name" placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
             <input type="hidden" id="imageBlob" name="image" value="" />
@@ -61,7 +63,7 @@
             var imageBlobField = document.getElementById('imageBlob');
             imageBlobField.value = image;
         }
-    </script>
+    </script> -->
 
     <style>
         body {
