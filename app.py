@@ -55,35 +55,27 @@ def register():
         name = request.form['name']
         image_base64 = request.form['image']
 
-        image_data = image_base64.encode('utf-8')
-        image_data = b64decode(image_data)
-
-        image_hash = hashlib.sha256(image_data).hexdigest()
-
+        # 将Base64编码的图像数据解码为字节流
+        image_data = b64decode(image_base64)
+        
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        sql_check = "SELECT * FROM facevote WHERE image_hash = %s"
-        cursor.execute(sql_check, (image_hash,))
+        sql_check = "SELECT * FROM facevote WHERE name = %s"
+        cursor.execute(sql_check, (name,))
         result = cursor.fetchone()
 
         if result:
             cursor.close()
             conn.close()
-            return redirect(url_for('register', error_message='Image already exists for another user'))
-        
-        # 將位元組數據轉換為圖像物件
-        image = Image.open(BytesIO(image_data))
-        
-        # 將圖像物件轉換為位元組數據
-        image_data = image.tobytes()
-
-        sql = "INSERT INTO facevote (name, image, image_hash) VALUES (%s, %s, %s)"
-        cursor.execute(sql, (name, image_data, image_hash))
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return redirect(url_for('index', success_message='Registration successful'))
+            return redirect(url_for('register', error_message='Name already exists. Please choose a different name'))
+        else:
+            sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
+            cursor.execute(sql, (name, image_data))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return redirect(url_for('index', success_message='Registration successful'))
 
     return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
 
