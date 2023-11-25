@@ -60,14 +60,7 @@ def register():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        sql_check = "SELECT * FROM facevote WHERE image_hash = %s"
-        cursor.execute(sql_check, (image_hash,))
-        result = cursor.fetchone()
-
-        if result:
-            cursor.close()
-            conn.close()
-            return redirect(url_for('register', error_message='Image already exists for another user'))
+        
 
         sql = "INSERT INTO facevote (name, image, imagehash) VALUES (%s, %s, %s)"
         cursor.execute(sql, (name, image_data, image_hash))
