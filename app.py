@@ -10,35 +10,26 @@ from deepface_detection import start_face_detection, is_face_matched
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'fypfacevote'
 
-# 加載人臉檢測器
 face_cascade = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
 
-# 打開網絡攝像頭
 cap = cv2.VideoCapture(0)
 
 def generate_frames():
     while True:
-        # 讀取當前幀的圖像
         ret, frame = cap.read()
 
         if not ret:
             break
-
-        # 將圖像轉換為灰度
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # 人臉檢測
         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-        # 在圖像上劃出人臉框
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-        # 轉換圖像格式為JPEG
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
 
-        # 返回圖像幀
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
