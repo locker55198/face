@@ -9,17 +9,47 @@
         <hr>
         <h2 style="text-align: center; font-size: 40px;">Login</h2>
 
-            <h1>Login</h1>
-    {% if error %}
+             {% if error %}
         <p>{{ error }}</p>
     {% endif %}
+    <div id="camera"></div>
     <form action="{{ url_for('login') }}" method="POST">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required><br><br>
-        <label for="image">Image (Base64):</label>
-        <input type="text" id="image" name="image" required><br><br>
+        <input type="hidden" id="image" name="image" required>
         <input type="submit" value="Login">
     </form>
+
+    <script>
+        // Create webcam video element
+        const videoElement = document.createElement('video');
+        videoElement.autoplay = true;
+        document.getElementById('camera').appendChild(videoElement);
+
+        // Capture image from webcam and set the Base64 value to the hidden input field
+        const captureImage = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+
+            const context = canvas.getContext('2d');
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+            const base64Image = canvas.toDataURL('image/jpeg').split(',')[1];
+            document.getElementById('image').value = base64Image;
+        };
+
+        // Access the webcam stream and display it in the video element
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                videoElement.srcObject = stream;
+            })
+            .catch((error) => {
+                console.error('Error accessing webcam:', error);
+            });
+
+        // Call captureImage function when the form is submitted
+        document.querySelector('form').addEventListener('submit', captureImage);
+    </script>
         
 <!--         <div>
             <form id="loginForm" action="/login" method="POST">
