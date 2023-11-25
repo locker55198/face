@@ -9,7 +9,56 @@
     <hr>
     <h2 style="text-align: center; font-size: 40px;">Register</h2>
 
-    <img src="{{ url_for('video_feed') }}" width="640" height="480">
+   {% if success_message %}
+        <p style="color: green;">{{ success_message }}</p>
+    {% endif %}
+    
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+    
+    <div id="camera-container">
+        <video id="camera-feed" width="640" height="480" autoplay></video>
+        <canvas id="image-canvas" width="640" height="480"></canvas>
+    </div>
+    
+    <form method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+        
+        <input type="hidden" id="image" name="image">
+        
+        <button type="button" onclick="captureImage()">Capture Image</button>
+        <br><br>
+        
+        <input type="submit" value="Register">
+    </form>
+    
+    <script>
+        // 獲取視訊流並顯示在視訊元素中
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                var videoElement = document.getElementById('camera-feed');
+                videoElement.srcObject = stream;
+            })
+            .catch(function(error) {
+                console.log('Error accessing webcam:', error);
+            });
+        
+        // 捕獲圖像並將其設置為隱藏的表單字段值
+        function captureImage() {
+            var videoElement = document.getElementById('camera-feed');
+            var canvasElement = document.getElementById('image-canvas');
+            var canvasContext = canvasElement.getContext('2d');
+            
+            canvasContext.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+            var imageDataUrl = canvasElement.toDataURL('image/png');
+            
+            var imageField = document.getElementById('image');
+            imageField.value = imageDataUrl;
+        }
+    </script>
         
 <!--     <form id="registerForm" action="/register" method="POST">
         <div style="text-align: center;">
