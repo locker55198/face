@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Face Voting System</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -9,7 +10,7 @@
     <hr>
     <h2 style="text-align: center; font-size: 40px;">Register</h2>
 
-   {% if success_message %}
+  {% if success_message %}
         <p style="color: green;">{{ success_message }}</p>
     {% endif %}
     
@@ -19,10 +20,9 @@
     
     <div id="camera-container">
         <video id="camera-feed" width="640" height="480" autoplay></video>
-        <canvas id="image-canvas" width="640" height="480"></canvas>
     </div>
     
-    <form method="POST">
+    <form id="register-form" method="POST">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
         <br><br>
@@ -36,27 +36,32 @@
     </form>
     
     <script>
-        // 獲取視訊流並顯示在視訊元素中
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function(stream) {
-                var videoElement = document.getElementById('camera-feed');
-                videoElement.srcObject = stream;
-            })
-            .catch(function(error) {
-                console.log('Error accessing webcam:', error);
-            });
-        
+        $(document).ready(function() {
+            // 獲取視訊流並顯示在視訊元素中
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    var videoElement = document.getElementById('camera-feed');
+                    videoElement.srcObject = stream;
+                })
+                .catch(function(error) {
+                    console.log('Error accessing webcam:', error);
+                });
+        });
+
         // 捕獲圖像並將其設置為隱藏的表單字段值
         function captureImage() {
             var videoElement = document.getElementById('camera-feed');
-            var canvasElement = document.getElementById('image-canvas');
+            var canvasElement = document.createElement('canvas');
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
+
             var canvasContext = canvasElement.getContext('2d');
-            
             canvasContext.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-            var imageDataUrl = canvasElement.toDataURL('image/png');
-            
+
+            var imageBase64 = canvasElement.toDataURL('image/jpeg');
+
             var imageField = document.getElementById('image');
-            imageField.value = imageDataUrl;
+            imageField.value = imageBase64;
         }
     </script>
         
