@@ -1,9 +1,8 @@
 import os
 from base64 import b64decode
-import pickle
 import numpy as np
 import cv2
-from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session
+from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session, Response
 from connect import get_db_connection
 from deepface_detection import start_face_detection, is_face_matched
 
@@ -13,7 +12,7 @@ app.config['SECRET_KEY'] = 'fypfacevote'
 face_cascade = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
 
 face_recognizer = cv2.face.LBPHFaceRecognizer_create()
-face_recognizer.read('models/haarcascade_frontalface_default.xml')
+face_recognizer.read('models/haarcascade_frontalface_alt_tree.xml')
 
 cap = cv2.VideoCapture(0)
 
@@ -53,7 +52,7 @@ def register():
         name = request.form['name']
         image_base64 = request.form['image']
 
-        # 将Base64编码的图像数据解码为字节流
+        # 將Base64編碼的圖像資料解碼為字節流
         image_data = b64decode(image_base64)
         
         conn = get_db_connection()
@@ -76,8 +75,10 @@ def register():
             return redirect(url_for('index', success_message='Registration successful'))
 
     return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
-   
-if request.method == 'POST':
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
         name = request.form['name']
         image_base64 = request.form['image']
 
@@ -88,16 +89,23 @@ if request.method == 'POST':
 
         label, confidence = face_recognizer.predict(gray_image)
 
-        conn.execute("SELECT * FROM facevote WHERE id=?", (label,))
-        user = conn.fetchone()
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM facevote WHERE id=?", (label,))
+        user = cursor.fetchone()
 
         if confidence < 100 and user is not None and user[1] == name:
             session['name'] = name
+            cursor.close()
+            conn.close()
             return redirect(url_for('vote', success_message='Login successful'))
         else:
+            cursor.close()
+            conn.close()
             return render_template('login.html', error='Invalid login')
+    
     return render_template('login.html')
-   
+
 @app.route('/vote', methods=['GET', 'POST'])
 def vote():
     if request.method == 'POST':
@@ -107,18 +115,17 @@ def vote():
             return redirect(url_for('login'))
         conn = get_db_connection()
         cursor = conn.cursor()
-        sql_update = "UPDATE facevote SET vote = %s WHERE name = %s"
-        cursor.execute(sql_update, (candidate, name))
+        cursor.execute("UPDATE facevote SET vote = %s WHERE name = %s", (candidate, name))
         conn.commit()
         cursor.close()
         conn.close()
         return redirect(url_for('index', success_message='Vote successful'))
+    
     return render_template('vote.html')
 
-   
 @app.route('/video_feed')
 def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(generate_frames(), mimetype='multipart/x-mixed-repla
    
 if __name__ == '__main__':
     app.debug = True
