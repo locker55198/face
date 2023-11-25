@@ -88,6 +88,41 @@
     </div>
 
     <script>
+    var video = document.getElementById('video');
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
+
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+            })
+            .catch(function(error) {
+                console.log('No Cam:', error);
+            });
+    }
+
+    function captureImage() {
+        var captureWidth = video.videoWidth;
+        var captureHeight = video.videoHeight;
+        
+        canvas.width = captureWidth;
+        canvas.height = captureHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        var image = canvas.toDataURL('image/jpeg');
+
+        var captureImage = document.getElementById('captureImage');
+        captureImage.src = image;
+        captureImage.style.display = 'block';
+        captureImage.style.width = video.offsetWidth + 'px';
+        captureImage.style.height = video.offsetHeight + 'px';
+
+        var imageBlobField = document.getElementById('image');
+        imageBlobField.value = image;
+    }
+</script>
+
+<!--     <script>
         var video = document.getElementById('video');
         var canvas = document.getElementById('canvas');
         var context = canvas.getContext('2d');
@@ -120,7 +155,7 @@
             var imageBlobField = document.getElementById('imageBlob');
             imageBlobField.value = image;
         }
-    </script>
+    </script> -->
 
     <style>
         body {
