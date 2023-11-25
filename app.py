@@ -2,6 +2,7 @@ import os
 from base64 import b64decode
 import numpy as np
 import cv2
+import hashlib
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session, Response
 from connect import get_db_connection
 from deepface_detection import start_face_detection, is_face_matched
@@ -52,27 +53,28 @@ def register():
         name = request.form['name']
         image_base64 = request.form['image']
 
-        # 將Base64編碼的圖像資料解碼為字節流
         image_data = b64decode(image_base64)
-        
+
+        image_hash = hashlib.sha256(image_data).hexdigest()
+
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        sql_check = "SELECT * FROM facevote WHERE name = %s"
-        cursor.execute(sql_check, (name,))
+        sql_check = "SELECT * FROM facevote WHERE image_hash = %s"
+        cursor.execute(sql_check, (image_hash,))
         result = cursor.fetchone()
 
         if result:
             cursor.close()
             conn.close()
-            return redirect(url_for('register', error_message='Name already exists. Please choose a different name'))
-        else:
-            sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
-            cursor.execute(sql, (name, image_data))
-            conn.commit()
-            cursor.close()
-            conn.close()
-            return redirect(url_for('index', success_message='Registration successful'))
+            return redirect(url_for('register', error_message='Image already exists for another user'))
+
+        sql = "INSERT INTO facevote (name, image, imagehash) VALUES (%s, %s, %s)"
+        cursor.execute(sql, (name, image_data, image_hash))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return redirect(url_for('index', success_message='Registration successful'))
 
     return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
 
