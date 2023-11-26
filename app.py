@@ -4,6 +4,8 @@ import hashlib
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session
 from connect import get_db_connection
 from base64 import b64decode
+from io import BytesIO
+from PIL import Image
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'fypfacevote'
