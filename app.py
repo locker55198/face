@@ -7,7 +7,6 @@ from connect import get_db_connection
 from base64 import b64decode
 from io import BytesIO
 from PIL import Image
-import cv2
 
 
 app = Flask(__name__)
