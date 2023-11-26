@@ -4,7 +4,6 @@ import numpy as np
 import cv2
 import hashlib
 from io import BytesIO
-from PIL import Image
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session
 from connect import get_db_connection
 
