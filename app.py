@@ -1,7 +1,9 @@
 import os
+from base64 import b64decode
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'fypfacevote'
 
 @app.route('/')
 def index():
