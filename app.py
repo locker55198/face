@@ -16,11 +16,11 @@ face_cascade = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml
 face_recognizer = cv2.face.LBPHFaceRecognizer_create()
 face_recognizer.read('models/haarcascade_frontalface_alt_tree.xml')
 
-cap = cv2.VideoCapture(0)
+camera = cv2.VideoCapture(0)
 
 def generate_frames():
     while True:
-        ret, frame = cap.read()
+        ret, frame = camera.read()
 
         if not ret:
             break
@@ -52,32 +52,29 @@ def favicon():
 def register():
     if request.method == 'POST':
         name = request.form['name']
-        image_base64 = request.form['image']
 
-        # 将Base64编码的图像数据解码为字节流
-        image_data = b64decode(image_base64)
-        
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        ret, frame = camera.read()
 
-        sql_check = "SELECT * FROM facevote WHERE name = %s"
-        cursor.execute(sql_check, (name,))
-        result = cursor.fetchone()
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        if result:
-            cursor.close()
-            conn.close()
-            return redirect(url_for('register', error_message='Name already exists. Please choose a different name'))
-        else:
+        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+
+        if len(faces) > 0:
+            for (x, y, w, h) in faces:
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+            _, img_encoded = cv2.imencode('.jpg', frame)
+            img_base64 = b64encode(img_encoded.tobytes()).decode('utf-8')
+
             sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
-            cursor.execute(sql, (name, image_data))
+            cursor.execute(sql, (name, img_base64))
             conn.commit()
-            cursor.close()
-            conn.close()
+
             return redirect(url_for('index', success_message='Registration successful'))
+        else:
+            return redirect(url_for('register', error_message='No face detected. Please try again.'))
 
     return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
