@@ -3,7 +3,6 @@ gunicorn
 mysql-connector-python
 numpy
 pyinstaller
-opencv-python
 opencv-python-headless
 pillow
 cvzone
