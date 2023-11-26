@@ -1,4 +1,5 @@
 import os
+import cv2
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session
 
 app = Flask(__name__)
