@@ -1,13 +1,14 @@
 import os
 import numpy as np
 import hashlib
-import cv2
 import sys
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session
 from connect import get_db_connection
 from base64 import b64decode
 from io import BytesIO
 from PIL import Image
+import cv2
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'fypfacevote'
