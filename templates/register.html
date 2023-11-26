@@ -68,14 +68,14 @@
         }
     </script> -->
         
-    <form id="registerForm" action="/register" method="POST">
+    <form action="/register" method="POST">
         <div style="text-align: center;">
-            <input type="text" id="name" name="name" placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
-            <input type="hidden" id="imageBlob" name="image" value="" />
+            <input type="text" id="name" name="name" required placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
+            <input type="hidden" id="image" name="image" required>
             <button type="submit" style="background-color: green; color: aliceblue; font-size: 20px; padding: 10px; position: relative; z-index: 1;">Register</button><br><br>
         </div>
-        <button type="button" onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>
     </form>
+    <button type="button" onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>
 
     <div style="position: relative; margin-top: -200px; margin-left: 60px;">
         <video id="video" width="600" height="500" autoplay></video>
@@ -87,7 +87,27 @@
         <button type="button" onclick="location.href='/'" style="font-size: 20px; position: relative; z-index: 1;">Back</button>
     </div>
 
-    <script>
+<script>
+        var video = document.getElementById('video');
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (error) {
+                console.log('Error accessing camera: ', error);
+            });
+
+        function captureImage() {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var imageBase64 = canvas.toDataURL('image/jpeg');
+            $("#image").val(imageBase64);
+        }
+    </script>
+
+<!--     <script>
     var video = document.getElementById('video');
     var canvas = document.createElement('canvas');
     var context = canvas.getContext('2d');
@@ -120,7 +140,7 @@
         var imageBlobField = document.getElementById('image');
         imageBlobField.value = image;
     }
-</script>
+</script> -->
 
 <!--     <script>
         var video = document.getElementById('video');
