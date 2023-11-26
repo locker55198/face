@@ -7,7 +7,6 @@ from io import BytesIO
 from PIL import Image
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session, Response
 from connect import get_db_connection
-from deepface_detection import start_face_detection, is_face_matched
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'fypfacevote'
