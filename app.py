@@ -1,4 +1,6 @@
 import os
+import numpy as np
+import cv2
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session
 from connect import get_db_connection
 from base64 import b64decode
@@ -15,6 +17,34 @@ def index():
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        name = request.form['name']
+
+        ret, frame = camera.read()
+
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+
+        if len(faces) > 0:
+            for (x, y, w, h) in faces:
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+            _, img_encoded = cv2.imencode('.jpg', frame)
+            img_base64 = b64encode(img_encoded.tobytes()).decode('utf-8')
+
+            sql = "INSERT INTO facevote (name, image) VALUES (%s, %s)"
+            cursor.execute(sql, (name, img_base64))
+            conn.commit()
+
+            return redirect(url_for('index', success_message='Registration successful'))
+        else:
+            return redirect(url_for('register', error_message='No face detected. Please try again.'))
+
+    return render_template('register.html', success_message=request.args.get('success_message'), error_message=request.args.get('error_message'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
