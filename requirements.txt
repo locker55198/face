@@ -1,9 +1,11 @@
 Flask
 gunicorn
 mysql-connector-python
-cvzone
-pillow
 numpy
+pyinstaller
 opencv-python
-mysql-connector
 opencv-python-headless
+pillow
+cvzone
+mysql-connector
+
