@@ -1,6 +1,5 @@
 import os
 from base64 import b64decode
-import numpy as np
 from flask import Flask, redirect, render_template, request, jsonify, send_from_directory, url_for, flash, session
 
 app = Flask(__name__)
