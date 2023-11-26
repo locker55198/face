@@ -7,4 +7,5 @@ opencv-python-headless
 pillow
 cvzone
 mysql-connector
-
+scikit-image
+opencv-contrib-python
