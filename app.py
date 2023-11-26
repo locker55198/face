@@ -18,25 +18,6 @@ face_recognizer.read('models/haarcascade_frontalface_alt_tree.xml')
 
 camera = cv2.VideoCapture(0)
 
-def generate_frames():
-    while True:
-        ret, frame = camera.read()
-
-        if not ret:
-            break
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-
-        for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-
-        ret, buffer = cv2.imencode('.jpg', frame)
-        frame = buffer.tobytes()
-
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
 @app.route('/')
 def index():
    print('Request for index page received')
@@ -46,7 +27,6 @@ def index():
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -138,10 +118,6 @@ def vote():
         return redirect(url_for('index', success_message='Vote successful'))
     
     return render_template('vote.html')
-
-@app.route('/video_feed')
-def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
    
 if __name__ == '__main__':
     app.debug = True
