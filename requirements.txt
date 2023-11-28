@@ -1,9 +1,9 @@
+opencv-python-headless
 Flask
 gunicorn
 mysql-connector-python
 numpy
 pyinstaller
-opencv-python-headless
 pillow
 cvzone
 mysql-connector
