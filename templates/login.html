@@ -13,7 +13,7 @@
         <p>{{ error }}</p>
     {% endif %}
     <div id="camera" style="text-align: center"></div>
-    <form action="{{ url_for('login') }}" method="POST">
+    <form action="/login" method="POST">
         <label style="position: absolute; top: 780px; left: 700px;" for="name">Name:</label>
         <input type="text" id="name" name="name" required style="position: absolute; top: 780px; left: 800px;"><br><br>
         <input type="hidden" id="image" name="image" required>
