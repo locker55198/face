@@ -1,187 +1,130 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Face Voting System</title>
-<!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-     <script>
-        var video = document.getElementById('video');
-        var canvas = document.getElementById('canvas');
-        var context = canvas.getContext('2d');
+    <title>Face Votering System</title>
+    <style>
+        #videoElement {
 
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function (stream) {
-                video.srcObject = stream;
-                video.onloadedmetadata = function(e) {
-                    video.play();
-                };
-            })
-            .catch(function (error) {
-                console.log('Error accessing camera: ', error);
-            });
+            width: 600px;
+            height: 500px;
+        }
+        #canvasElement {
+            width: 600px;
+            height: 500px;
+        }
+    </style>
+    <script>
+        // 获取视频流并显示在<video>元素中
+        function startStream() {
+            var video = document.getElementById("videoElement");
 
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function (stream) {
+                        video.srcObject = stream;
+                    })
+                    .catch(function (error) {
+                        console.log("Error accessing webcam:", error);
+                    });
+            }
+        }
+
+        // 页面加载完成后开始获取视频流
+        window.onload = function () {
+            startStream();
+        };
+
+        // 将拍摄的图像填充到表单中的隐藏字段中，并在canvas中显示图像
         function captureImage() {
+            var video = document.getElementById("videoElement");
+            var canvas = document.getElementById("canvasElement");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            var context = canvas.getContext('2d');
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             var imageBase64 = canvas.toDataURL('image/jpeg');
-            $("#image").val(imageBase64);
+            document.getElementById("image").value = imageBase64;
+            video.style.display = "none"; // 隐藏视频元素
+            canvas.style.display = "block"; // 显示canvas元素
         }
     </script>
 </head>
 
 <body>
-    <h1 style="text-align: center; color: aliceblue;">Face Voting System</h1>
+
+    <h1 style="text-align: center; color: aliceblue;">Face Votering System</h1>
     <hr>
     <h2 style="text-align: center; font-size: 40px;">Register</h2>
-
-<!--  {% if success_message %}
-        <p style="color: green;">{{ success_message }}</p>
-    {% endif %}
-    
-    {% if error_message %}
-        <p style="color: red;">{{ error_message }}</p>
-    {% endif %}
-    
-    <div id="camera-container">
-        <video id="camera-feed" width="640" height="480" autoplay></video>
-    </div>
-    
-    <form id="register-form" method="POST">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-        <br><br>
-        
-        <input type="hidden" id="image" name="image">
-        
-        <button type="button" onclick="captureImage()">Capture Image</button>
-        <br><br>
-        
-        <input type="submit" value="Register">
-    </form>
-    
-    <script>
-        $(document).ready(function() {
-            // 獲取視訊流並顯示在視訊元素中
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(function(stream) {
-                    var videoElement = document.getElementById('camera-feed');
-                    videoElement.srcObject = stream;
-                })
-                .catch(function(error) {
-                    console.log('Error accessing webcam:', error);
-                });
-        });
-
-        // 捕獲圖像並將其設置為隱藏的表單字段值
-        function captureImage() {
-            var videoElement = document.getElementById('camera-feed');
-            var canvasElement = document.createElement('canvas');
-            canvasElement.width = videoElement.videoWidth;
-            canvasElement.height = videoElement.videoHeight;
-
-            var canvasContext = canvasElement.getContext('2d');
-            canvasContext.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-
-            var imageBase64 = canvasElement.toDataURL('image/jpeg');
-
-            var imageField = document.getElementById('image');
-            imageField.value = imageBase64;
-
-            // 提交表單
-            document.getElementById('register-form').submit();
-        }
-    </script> -->
-     <button type="button" onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>
-    <form action="/register" method="POST">
-        <div style="text-align: center;">
-            <input type="text" id="name" name="name" required placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
-            <input type="hidden" id="image" name="image" required>
-            <button type="submit" style="background-color: green; color: aliceblue; font-size: 20px; padding: 10px; position: relative; z-index: 1;">Register</button><br><br>
-        </div>
-    </form>
-   
-    <div style="position: relative; margin-top: -200px; margin-left: 60px;">
-        <video id="video" width="600" height="500" autoplay></video>
-        <canvas id="canvas" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;"></canvas>
-        <img id="captureImage" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;">
-    </div>
-
     <div style="text-align: center;">
+        <form action="/register" method="POST">
+            <input type="text" id="name" name="name" placeholder="Enter your name" style="font-size: 30px; position: relative; z-index: 1;"><br><br>
+            <input type="hidden" id="image" name="image">
+            <button type="submit" style="background-color: green; color: aliceblue; font-size: 20px; padding: 10px; position: relative; z-index: 1;">Register</button><br><br>
+            <button type="button" onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture Image</button>
+        </form>
         <button type="button" onclick="location.href='/'" style="font-size: 20px; position: relative; z-index: 1;">Back</button>
     </div>
+    <!--<button onclick="captureImage()" style="background-color: green; color: aliceblue; font-size: 20px; position: absolute; padding: 10px; top: 670px; left: 290px;">Capture</button>-->
+    <div style="position: relative; margin-top: -200px; margin-left: 60px;">
+        <video id="videoElement" autoplay></video>
+        <canvas id="canvasElement" style="display: none;"></canvas>
+        <!--<img id="capturedImage" style="position: absolute; top: 0; left: 0; width: 600px; height: 650px; object-fit: cover; display: none;">-->
+    </div>
 
-<!--     <script>
-    var video = document.getElementById('video');
-    var canvas = document.createElement('canvas');
-    var context = canvas.getContext('2d');
 
-    if (navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function(stream) {
-                video.srcObject = stream;
-            })
-            .catch(function(error) {
-                console.log('No Cam:', error);
-            });
-    }
+     <script>
+    //     var video = document.getElementById('video');
+    //     var canvas = document.createElement('canvas');
+    //     var context = canvas.getContext('2d');
 
-    function captureImage() {
-        var captureWidth = video.videoWidth;
-        var captureHeight = video.videoHeight;
-        
-        canvas.width = captureWidth;
-        canvas.height = captureHeight;
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        var image = canvas.toDataURL('image/jpeg');
+    //     if (navigator.mediaDevices.getUserMedia) {
+    //         navigator.mediaDevices.getUserMedia({ video: true })
+    //             .then(function(stream) {
+    //                 video.srcObject = stream;
+    //             })
+    //             .catch(function(error) {
+    //                 console.log('No Cam:', error);
+    //             });
+    //     }
 
-        var captureImage = document.getElementById('captureImage');
-        captureImage.src = image;
-        captureImage.style.display = 'block';
-        captureImage.style.width = video.offsetWidth + 'px';
-        captureImage.style.height = video.offsetHeight + 'px';
+    //     function captureImage() {
+    //         var captureWidth = 600; // 調整為所需的寬度
+    //         var captureHeight = 500; // 調整為所需的高度
 
-        var imageBlobField = document.getElementById('image');
-        imageBlobField.value = image;
-    }
-</script> -->
+    //         // 設定畫布的寬度和高度
+    //         canvas.width = captureWidth;
+    //         canvas.height = captureHeight;
+    //         context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    //         var image = canvas.toDataURL('image/jpeg');
 
-<!--     <script>
-        var video = document.getElementById('video');
-        var canvas = document.getElementById('canvas');
-        var context = canvas.getContext('2d');
+    //         // 獲取使用者輸入的姓名
+    //         var name = document.getElementById('name').value;
 
-        if (navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(function(stream) {
-                    video.srcObject = stream;
-                })
-                .catch(function(error) {
-                    console.log('No Cam:', error);
-                });
-        }
+    //         // 將圖像顯示在圖像元素中
+    //         var capturedImage = document.getElementById('capturedImage');
+    //         capturedImage.src = image;
+    //         capturedImage.style.display = 'block';
+    //         capturedImage.style.width = video.offsetWidth + 'px';
+    //         capturedImage.style.height = video.offsetHeight + 'px';
 
-        function captureImage() {
-            var captureWidth = 600;
-            var captureHeight = 500;
-            
-            canvas.width = captureWidth;
-            canvas.height = captureHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            var image = canvas.toDataURL('image/jpeg');
-
-            var captureImage = document.getElementById('captureImage');
-            captureImage.src = image;
-            captureImage.style.display = 'block';
-            captureImage.style.width = video.offsetWidth + 'px';
-            captureImage.style.height = video.offsetHeight + 'px';
-
-            var imageBlobField = document.getElementById('imageBlob');
-            imageBlobField.value = image;
-        }
-    </script> -->
+    //         // 將圖像和姓名作為表單數據發送到後端進行處理
+    //         var form = new FormData(document.getElementById('registerForm'));
+    //         form.append('image', image);
+    //         form.append('name', name);
+    //         var xhr = new XMLHttpRequest();
+    //         xhr.open('POST', '/register', true);
+    //         xhr.onreadystatechange = function() {
+    //             if (xhr.readyState === 4 && xhr.status === 200) {
+    //                 console.log('姓名和圖像已發送到後端');
+    //             }
+    //         };
+    //         xhr.send(form);
+    //     }
+     </script>
 
     <style>
         body {
-            background-image: url("{{ url_for('static', filename='images/vote.jpg') }}");
+            background-image: url('{{ url_for('static', filename='images/vote.jpg') }}');
             background-size: cover;
             background-repeat: no-repeat;
         }
