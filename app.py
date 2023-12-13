@@ -65,7 +65,7 @@ def login():
 
         if result:
             # 將使用者名稱存入session
-            #session['name'] = name
+            session['name'] = name
 
             cursor.close()
             conn.close()
