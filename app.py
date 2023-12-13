@@ -80,16 +80,16 @@ def login():
 @app.route('/vote', methods=['GET', 'POST'])
 def vote():
     if request.method == 'POST':
-        candidate = request.form['vote']
+        candidate =request.form['vote']
         name = session.get('name')
+
         if name is None:
             return redirect(url_for('login'))
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("UPDATE facevote SET vote = %s WHERE name = %s", (candidate, name))
-        conn.commit()
-        cursor.close()
-        conn.close()
+        else:
+           sql_update = "UPDATE facevote SET vote = %s WHERE name = %s"
+           db.execute(sql_update, (candidate, name))
+           mydb.commit()
+
         return redirect(url_for('index', success_message='Vote successful'))
 
     return render_template('vote.html')
