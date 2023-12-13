@@ -82,25 +82,16 @@ def vote():
     if request.method == 'POST':
         candidate = request.form['vote']
         name = session.get('name')
-
         if name is None:
             return redirect(url_for('login'))
-
-        # 從資料庫中獲取現有的投票數字
-        sql_get_vote = "SELECT vote FROM facevote WHERE name = %s"
-        db.execute(sql_get_vote, (name,))
-        current_vote = db.fetchone()[0]
-
-        # 更新投票數字
-        new_vote = current_vote + 1
-
-        # 將新的投票數字更新到資料庫中
-        sql_update = "UPDATE facevote SET vote = %s WHERE name = %s"
-        db.execute(sql_update, (new_vote, name))
-        mydb.commit()
-
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE facevote SET vote = %s WHERE name = %s", (candidate, name))
+        conn.commit()
+        cursor.close()
+        conn.close()
         return redirect(url_for('index', success_message='Vote successful'))
-
+    
     return render_template('vote.html')
 
 if __name__ == '__main__':
