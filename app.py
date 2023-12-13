@@ -80,15 +80,24 @@ def login():
 @app.route('/vote', methods=['GET', 'POST'])
 def vote():
     if request.method == 'POST':
-        candidate =request.form['vote']
+        candidate = request.form['vote']
         name = session.get('name')
 
         if name is None:
             return redirect(url_for('login'))
-        else:
-           sql_update = "UPDATE facevote SET vote = %s WHERE name = %s"
-           db.execute(sql_update, (candidate, name))
-           mydb.commit()
+
+        # 從資料庫中獲取現有的投票數字
+        sql_get_vote = "SELECT vote FROM facevote WHERE name = %s"
+        db.execute(sql_get_vote, (name,))
+        current_vote = db.fetchone()[0]
+
+        # 更新投票數字
+        new_vote = current_vote + 1
+
+        # 將新的投票數字更新到資料庫中
+        sql_update = "UPDATE facevote SET vote = %s WHERE name = %s"
+        db.execute(sql_update, (new_vote, name))
+        mydb.commit()
 
         return redirect(url_for('index', success_message='Vote successful'))
 
